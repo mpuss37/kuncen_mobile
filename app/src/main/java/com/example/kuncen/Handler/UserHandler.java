@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.inputmethodservice.Keyboard;
 
 import com.example.kuncen.View.DatabasePass;
 import com.example.kuncen.View.MainActivity;

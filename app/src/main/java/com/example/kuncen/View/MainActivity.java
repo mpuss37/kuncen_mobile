@@ -1,11 +1,15 @@
 package com.example.kuncen.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private Button buttonSave;
     private Intent intent;
     private UserHandler userHandler;
+    private ConstraintLayout constraintLayoutMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,16 +39,23 @@ public class MainActivity extends AppCompatActivity {
         buttonSave = findViewById(R.id.buttonSave);
         signup = findViewById(R.id.textViewSignUp);
         donthaveAcc = findViewById(R.id.textViewDontHaveAcc);
+        constraintLayoutMain = findViewById(R.id.clMain);
+
+        constraintLayoutMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideKeyboard(v);
+            }
+        });
+
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                buttonSave.setEnabled(false);
                 username = etUsername.getText().toString();
                 pass = etPassword.getText().toString();
                 if (buttonSave.getText().equals("Sign Up")) {
                     if (username.equals("") && pass.equals("")) {
                         Toast.makeText(MainActivity.this, "Input username/pass", Toast.LENGTH_SHORT).show();
-                        buttonSave.setEnabled(true);
                     } else {
                         long insertUser = userHandler.insertUser(username, pass);
                         Toast.makeText(MainActivity.this, "data has been add", Toast.LENGTH_SHORT).show();
@@ -54,12 +66,10 @@ public class MainActivity extends AppCompatActivity {
                             etUsername.setText("");
                             etPassword.setText("");
                         }
-                        buttonSave.setEnabled(true);
                     }
                 } else if (buttonSave.getText().equals("Login")) {
                     if (username.equals("") && pass.equals("")) {
                         Toast.makeText(MainActivity.this, "Input username/pass", Toast.LENGTH_SHORT).show();
-                        buttonSave.setEnabled(true);
                     } else {
                         if (userHandler.readUser(username, pass)) {
                             intent = new Intent(MainActivity.this, MenuManager.class);
@@ -90,6 +100,14 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    void hideKeyboard(View view) {
+        view = getCurrentFocus();
+        if (view != null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     @Override

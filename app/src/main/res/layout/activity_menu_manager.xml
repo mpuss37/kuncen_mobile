@@ -20,8 +20,8 @@
 
     <ImageView
         android:id="@+id/imageViewAddItem"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginRight="12dp"

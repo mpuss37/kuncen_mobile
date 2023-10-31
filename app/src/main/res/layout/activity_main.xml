@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/clMain"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".View.MainActivity">
@@ -74,6 +75,7 @@
             android:fontFamily="@font/jetbrains_mono_semibold"
             android:hint="Password"
             android:inputType="textPassword"
+            android:text="herdi"
             android:textColorHint="#000000" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -93,6 +95,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/jetbrains_mono_semibold"
             android:hint="Username"
+            android:text="herdi"
             android:textColorHint="#000000" />
 
     </com.google.android.material.textfield.TextInputLayout>

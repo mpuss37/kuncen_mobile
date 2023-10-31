@@ -57,21 +57,27 @@ public class MainActivity extends AppCompatActivity {
                     if (username.equals("") && pass.equals("")) {
                         Toast.makeText(MainActivity.this, "Input username/pass", Toast.LENGTH_SHORT).show();
                     } else {
-                        long insertUser = userHandler.insertUser(username, pass);
-                        Toast.makeText(MainActivity.this, "data has been add", Toast.LENGTH_SHORT).show();
-                        buttonSave.setText("Login");
-                        donthaveAcc.setText("already have account, ");
-                        signup.setText("Login");
-                        if (insertUser != -1) {
+                        if (userHandler.readUser(username)) {
+                            Toast.makeText(MainActivity.this, "data has been added", Toast.LENGTH_SHORT).show();
                             etUsername.setText("");
                             etPassword.setText("");
+                        } else {
+                            long insertUser = userHandler.insertUser(username, pass);
+                            Toast.makeText(MainActivity.this, "data added successfully", Toast.LENGTH_SHORT).show();
+                            buttonSave.setText("Login");
+                            donthaveAcc.setText("already have account, ");
+                            signup.setText("Login");
+                            if (insertUser != -1) {
+                                etUsername.setText("");
+                                etPassword.setText("");
+                            }
                         }
                     }
                 } else if (buttonSave.getText().equals("Login")) {
                     if (username.equals("") && pass.equals("")) {
                         Toast.makeText(MainActivity.this, "Input username/pass", Toast.LENGTH_SHORT).show();
                     } else {
-                        if (userHandler.readUser(username, pass)) {
+                        if (userHandler.readUser(username)) {
                             intent = new Intent(MainActivity.this, MenuManager.class);
                             startActivity(intent);
                             Toast.makeText(MainActivity.this, "login with " + username, Toast.LENGTH_SHORT).show();

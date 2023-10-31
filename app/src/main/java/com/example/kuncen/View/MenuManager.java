@@ -5,8 +5,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -57,10 +55,6 @@ public class MenuManager extends MainActivity {
                 menuAddItem();
             }
         });
-    }
-
-    private void deleteItem() {
-
     }
 
     private void menuAddItem() {

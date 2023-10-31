@@ -32,8 +32,8 @@ public class UserHandler extends MainActivity {
         return sqLiteDatabase.insert(databasePass.table_user, null, values);
     }
 
-    public boolean readUser(String username, String password) {
-        String query = "SELECT * FROM " + databasePass.table_user + " WHERE " + databasePass.col_username + " = '" + username + "' AND " + databasePass.col_pass + " = '" + password + "'";
+    public boolean readUser(String username) {
+        String query = "SELECT * FROM " + databasePass.table_user + " WHERE " + databasePass.col_username + " = '" + username + "'";
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
         if (cursor.getCount() > 0) {
             cursor.close();

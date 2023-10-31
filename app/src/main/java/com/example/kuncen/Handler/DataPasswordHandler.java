@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.view.Display;
 
 import com.example.kuncen.Model.DataModel;
 import com.example.kuncen.View.DatabasePass;
@@ -41,13 +42,17 @@ public class DataPasswordHandler extends MainActivity {
         return sqLiteDatabase.insert(databasePass.table_data, null, contentValues);
     }
 
+    public long deleteData(int id_data) {
+        return sqLiteDatabase.delete(databasePass.table_data, "id_data = " +id_data, null);
+    }
+
     public ArrayList<DataModel> displayData() {
         sqLiteDatabase = databasePass.getReadableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery("select * from " + databasePass.table_data, null);
         ArrayList<DataModel> modelArrayList = new ArrayList<>();
         if (cursor.moveToFirst()) {
             do {
-                modelArrayList.add(new DataModel(cursor.getString(1), cursor.getString(2), cursor.getString(3)));
+                modelArrayList.add(new DataModel(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3)));
             } while (cursor.moveToNext());
         }
         cursor.close();

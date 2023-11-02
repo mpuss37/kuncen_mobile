@@ -41,7 +41,7 @@ public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             constraintLayoutItem = itemView.findViewById(R.id.clItem);
-            textViewIdData = itemView.findViewById(R.id.tv_id_data);
+            textViewIdData = itemView.findViewById(R.id.tvIdData);
             textViewWebsiteName = itemView.findViewById(R.id.tvNameWebsite);
             textViewUsername = itemView.findViewById(R.id.tvUsername);
             textViewPassword = itemView.findViewById(R.id.tvPassword);
@@ -54,7 +54,7 @@ public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.password_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.pass_item, parent, false);
         return new ViewHolder(view);
     }
 

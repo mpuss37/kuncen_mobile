@@ -57,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
                     if (username.equals("") && pass.equals("")) {
                         Toast.makeText(MainActivity.this, "Input username/pass", Toast.LENGTH_SHORT).show();
                     } else {
-                        if (userHandler.readUser(username)) {
+                        int id_user = userHandler.readUser(username);
+                        if (id_user != -1) {
                             Toast.makeText(MainActivity.this, "data has been added", Toast.LENGTH_SHORT).show();
                             etUsername.setText("");
                             etPassword.setText("");
@@ -77,8 +78,11 @@ public class MainActivity extends AppCompatActivity {
                     if (username.equals("") && pass.equals("")) {
                         Toast.makeText(MainActivity.this, "Input username/pass", Toast.LENGTH_SHORT).show();
                     } else {
-                        if (userHandler.readUser(username)) {
+                        int id_user = userHandler.readUser(username);
+                        //if (userHandler.readUser(username)) {
+                        if (id_user != -1) {
                             intent = new Intent(MainActivity.this, MenuManager.class);
+                            intent.putExtra("key_id_user", id_user);
                             startActivity(intent);
                             Toast.makeText(MainActivity.this, "login with " + username, Toast.LENGTH_SHORT).show();
                         } else {

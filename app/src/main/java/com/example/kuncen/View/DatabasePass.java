@@ -15,7 +15,11 @@ public class DatabasePass extends SQLiteOpenHelper {
     public final String table_user = "user";
     public final String col_username = "username";
     public final String col_pass = "password";
+
     private final String table_admin = "admin";
+    public final String col_admin_username = "username";
+    public final String col_admin_pass = "password";
+
     public final String table_data = "data_pass";
     public final String col_website_name = "name_website";
     public final String col_website_username = "username";
@@ -32,11 +36,13 @@ public class DatabasePass extends SQLiteOpenHelper {
 
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table IF NOT EXISTS " + table_user + " (id_user integer primary key autoincrement, " + col_username + " text, " + col_pass + " text)");
-        db.execSQL("create table IF NOT EXISTS " + table_data + " (id_data integer primary key autoincrement," + col_website_name + " text," + col_website_username + " text, " + col_website_pass + " text)");
+        db.execSQL("create table IF NOT EXISTS " + table_admin + " (id_admin integer primary key autoincrement," + col_admin_username + " text," + col_admin_pass + " text)");
+        db.execSQL("create table IF NOT EXISTS " + table_data + " (id_data integer primary key autoincrement," + "id_user integer," + col_website_name + " text," + col_website_username + " text, " + col_website_pass + " text," + "FOREIGN KEY (id_user) REFERENCES " + table_data + "(id_user))");
         System.out.println("finish create table");
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        
     }
 
 }

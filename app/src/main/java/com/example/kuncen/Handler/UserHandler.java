@@ -32,15 +32,22 @@ public class UserHandler extends MainActivity {
         return sqLiteDatabase.insert(databasePass.table_user, null, values);
     }
 
-    public boolean readUser(String username) {
-        String query = "SELECT * FROM " + databasePass.table_user + " WHERE " + databasePass.col_username + " = '" + username + "'";
-        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
-        if (cursor.getCount() > 0) {
-            cursor.close();
-            return true;
-        } else {
-            cursor.close();
-            return false;
+    //    public boolean readUser(String username) {
+    public int readUser(String username) {
+        int id_user = -1;
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + databasePass.table_user + " WHERE " + databasePass.col_username + " = '" + username + "'", null);
+//        if (cursor.getCount() > 0) {
+//            cursor.close();
+//            return true;
+//        } else {
+//            cursor.close();
+//            return false;
+//        }
+        if (cursor.moveToFirst()) {
+            id_user = cursor.getInt(0);
         }
+
+        cursor.close();
+        return id_user;
     }
 }

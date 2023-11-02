@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/clItem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    tools:context=".PassItemActivity">
+
+    <TextView
+        android:id="@+id/tvNameWebsite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:text="Website"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/tvUsername"
+        app:layout_constraintStart_toEndOf="@+id/imageView4"
+        app:layout_constraintTop_toTopOf="@+id/imageView4" />
+
+    <TextView
+        android:id="@+id/tvUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:fontFamily="sans-serif"
+        android:text="Username"
+        android:textAlignment="gravity"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+        app:layout_constraintStart_toEndOf="@+id/imageView4"
+        app:layout_constraintTop_toBottomOf="@+id/tvNameWebsite" />
+
+    <TextView
+        android:id="@+id/tvIdData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:fontFamily="sans-serif"
+        android:text="tvIdData"
+        android:textColor="#000000"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@+id/tvNameWebsite"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:fontFamily="sans-serif"
+        android:text="tvPassword"
+        android:textColor="#000000"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvUsername" />
+
+    <ImageView
+        android:id="@+id/imageViewRemove"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_margin="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/remove" />
+
+    <ImageView
+        android:id="@+id/imageViewCopyPassword"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_margin="10dp"
+        android:layout_marginEnd="20dp"
+        android:tint="#FF0000"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewRemove"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewRemove"
+        app:layout_constraintTop_toTopOf="@+id/imageViewRemove"
+        app:srcCompat="@drawable/copy"
+        tools:ignore="UseAppTint" />
+
+    <ImageView
+        android:id="@+id/imageViewCopyUsername"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_margin="10dp"
+        android:layout_marginEnd="20dp"
+        android:tint="#FF0000"
+        app:layout_constraintBottom_toBottomOf="@+id/imageViewCopyPassword"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewCopyPassword"
+        app:layout_constraintTop_toTopOf="@+id/imageViewCopyPassword"
+        app:srcCompat="@drawable/copy"
+        tools:ignore="UseAppTint" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/lock"
+        app:tint="#FF0000" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

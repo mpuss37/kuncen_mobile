@@ -28,19 +28,23 @@ public class MenuManager extends MainActivity {
     private Button buttonSave;
     private EditText editTextWebsite, editTextUsername, editTextPassword;
     private String name_website, username, pass;
+    private int id_user;
     private DataPasswordHandler dataPasswordHandler;
     private DataPasswordAdapter dataPasswordAdapter;
     private ArrayList<DataModel> dataModelArrayList;
+    private Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_manager);
+        bundle = getIntent().getExtras();
+        id_user = bundle.getInt("key_id_user");
         rvPassword = findViewById(R.id.rvData);
         dataModelArrayList = new ArrayList<>();
         dataPasswordHandler = new DataPasswordHandler(this);
         dataPasswordHandler.openRead();
-        dataModelArrayList = dataPasswordHandler.displayData();
+        dataModelArrayList = dataPasswordHandler.displayData(id_user);
         dataPasswordAdapter = new DataPasswordAdapter(dataModelArrayList, MenuManager.this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MenuManager.this, RecyclerView.VERTICAL, false);
         rvPassword.setLayoutManager(linearLayoutManager);
@@ -51,8 +55,8 @@ public class MenuManager extends MainActivity {
             @Override
             public void onClick(View v) {
                 hideKeyboard(v);
-
                 menuAddItem();
+                Toast.makeText(MenuManager.this, "" + id_user, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -78,16 +82,20 @@ public class MenuManager extends MainActivity {
                 if (name_website.equals("") && username.equals("") && pass.equals("")) {
                     Toast.makeText(MenuManager.this, "Input username/pass", Toast.LENGTH_SHORT).show();
                 } else {
-                    long insertData = DataPasswordHandler.insertDataPass(name_website, username, pass);
-                    dataPasswordAdapter.notifyDataSetChanged();
-                    Toast.makeText(MenuManager.this, "data has been add", Toast.LENGTH_SHORT).show();
-                    if (insertData != -1) {
-                        dataModelArrayList.clear();
-                        dataModelArrayList.addAll(dataPasswordHandler.displayData());
-                        editTextWebsite.setText("");
-                        editTextUsername.setText("");
-                        editTextPassword.setText("");
-                        alertDialog.dismiss();
+                    if (dataPasswordHandler.checkData(id_user)) {
+                        Toast.makeText(MenuManager.this, "bayar dulu", Toast.LENGTH_SHORT).show();
+                    } else {
+                        long insertData = DataPasswordHandler.insertDataPass(id_user, name_website, username, pass);
+                        dataPasswordAdapter.notifyDataSetChanged();
+                        Toast.makeText(MenuManager.this, "data has been add", Toast.LENGTH_SHORT).show();
+                        if (insertData != -1) {
+                            dataModelArrayList.clear();
+                            dataModelArrayList.addAll(dataPasswordHandler.displayData(id_user));
+                            editTextWebsite.setText("");
+                            editTextUsername.setText("");
+                            editTextPassword.setText("");
+                            alertDialog.dismiss();
+                        }
                     }
                 }
             }

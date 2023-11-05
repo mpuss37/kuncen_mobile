@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class UserHandler extends MainActivity {
     private static DatabasePass databasePass;
     private SQLiteDatabase sqLiteDatabase;
+    private ContentValues contentValues;
 
     public UserHandler(Context context) {
         databasePass = new DatabasePass(context);
@@ -34,10 +35,10 @@ public class UserHandler extends MainActivity {
     }
 
     public long insertUser(String username, String password) {
-        ContentValues values = new ContentValues();
-        values.put(databasePass.col_username, username);
-        values.put(databasePass.col_pass, password);
-        return sqLiteDatabase.insert(databasePass.table_user, null, values);
+        contentValues = new ContentValues();
+        contentValues.put(databasePass.col_username, username);
+        contentValues.put(databasePass.col_pass, password);
+        return sqLiteDatabase.insert(databasePass.table_user, null, contentValues);
     }
 
     //    public boolean readUser(String username) {
@@ -65,6 +66,13 @@ public class UserHandler extends MainActivity {
 //            cursor.close();
 //            return false;
 //        }
+    }
+
+    public int deleteUser(String username) {
+        contentValues = new ContentValues();
+        UserHandler.this.contentValues.put(databasePass.col_username, username);
+        String whereClause = databasePass.col_username + " = '" + username + "'";
+        return sqLiteDatabase.delete(databasePass.table_user, whereClause, null);
     }
 
     public ArrayList<UserModel> displayUser() {

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -32,8 +33,8 @@ public class AdminAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView textViewIdUser, textViewUsername, textViewPassword;
-        private ImageView imageViewRemove;
+        private TextView textViewIdUser, textViewUsername, textViewData;
+        private ImageView imageViewCopy, imageViewCopy1, imageViewRemove;
         private ConstraintLayout constraintLayoutItem;
 
         public ViewHolder(@NonNull View itemView) {
@@ -41,7 +42,10 @@ public class AdminAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             constraintLayoutItem = itemView.findViewById(R.id.clItem);
             textViewIdUser = itemView.findViewById(R.id.tvIdUser);
             textViewUsername = itemView.findViewById(R.id.tvUsername);
-            textViewPassword = itemView.findViewById(R.id.tvPassword);
+            textViewData = itemView.findViewById(R.id.tvData);
+            imageViewRemove = itemView.findViewById(R.id.imageViewRemove);
+            imageViewCopy1 = itemView.findViewById(R.id.imageViewCopyUsername);
+            imageViewCopy = itemView.findViewById(R.id.imageViewCopyPassword);
         }
     }
 
@@ -57,50 +61,24 @@ public class AdminAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         UserModel userModel = userModelArrayList.get(position);
         userHandler = new UserHandler(context);
         menuManager = new MenuManager();
-        String username = null;
         userHandler.openWrite();
         if (holder instanceof ViewHolder) {
             ViewHolder viewHolder = (ViewHolder) holder;
             viewHolder.textViewUsername.setText(userModel.getUsername());
-            viewHolder.textViewPassword.setText(userModel.getPassword());
-
-            String website;
-            String password;
+            viewHolder.textViewData.setText(userModel.getPassword());
+            viewHolder.imageViewCopy1.setVisibility(View.GONE);
+            viewHolder.imageViewCopy.setVisibility(View.GONE);
+            String username;
             username = viewHolder.textViewUsername.getText().toString();
-            password = viewHolder.textViewPassword.getText().toString();
-//            viewHolder.imageViewRemove.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    dataModelArrayList.remove(holder.getAdapterPosition());
-//                    userHandler.deleteData(((id)));
-//                    Toast.makeText(context, "data has been delete, Username : " + id, Toast.LENGTH_SHORT).show();
-//                    notifyItemRemoved(holder.getAdapterPosition());
-//                }
-//            });
-//
-//            viewHolder.imageViewCopyUsername.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    saveClipboard(username);
-//                    Toast.makeText(context, "data username has been copy, " + username, Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//
-//            viewHolder.imageViewCopyPassword.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    saveClipboard(password);
-//                    Toast.makeText(context, "data password has been copy, Username : " + username, Toast.LENGTH_SHORT).show();
-//                }
-//            });
-
-//            viewHolder.constraintLayoutItem.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    saveClipboard(password);
-//                    Toast.makeText(context, "data password has been copy, Username : " + username, Toast.LENGTH_SHORT).show();
-//                }
-//            });
+            viewHolder.imageViewRemove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    userModelArrayList.remove(holder.getAdapterPosition());
+                    userHandler.deleteUser(username);
+                    Toast.makeText(context, "data has delete, Username : " + username, Toast.LENGTH_SHORT).show();
+                    notifyItemRemoved(holder.getAdapterPosition());
+                }
+            });
         }
 
     }

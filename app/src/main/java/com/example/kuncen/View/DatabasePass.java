@@ -25,8 +25,13 @@ public class DatabasePass extends SQLiteOpenHelper {
     public final String col_website_username = "username";
     public final String col_website_pass = "password";
 
-    private final String table_transaction = "subcription";
-    private final String table_history = "history";
+    public final String table_transaction = "subcription";
+
+    public final String table_history = "history";
+    public final String col_history_website_name = "name_website";
+    public final String col_history_website_username = "username";
+    public final String col_history_website_pass = "password";
+
     private Context context;
     private ContentValues contentValues;
     private static final int DATABASE_VERSION = 1;
@@ -48,7 +53,9 @@ public class DatabasePass extends SQLiteOpenHelper {
         contentValues.put(col_admin_pass, "admin");
         db.insert(table_admin, null, contentValues);
 
-        db.execSQL("create table IF NOT EXISTS " + table_data + " (id_data integer primary key autoincrement," + "id_user integer," + col_website_name + " text," + col_website_username + " text, " + col_website_pass + " text," + "FOREIGN KEY (id_user) REFERENCES " + table_data + "(id_user))");
+        db.execSQL("create table IF NOT EXISTS " + table_data + " (id_data integer primary key autoincrement," + "id_user integer," + col_website_name + " text," + col_website_username + " text, " + col_website_pass + " text," + "FOREIGN KEY (id_user) REFERENCES " + table_user + "(id_user))");
+
+        db.execSQL("create table IF NOT EXISTS " + table_history + " (id_history integer primary key autoincrement," + "id_user integer," + col_history_website_username + " text," + col_history_website_name + " text, " + col_history_website_pass + " text," + "FOREIGN KEY (id_user) REFERENCES " + table_data + "(id_user))");
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

@@ -75,7 +75,11 @@ public class MenuManager extends MainActivity {
             });
         } else if (id_admin > 0) {
             userModelArrayList = userHandler.displayUser();
-            adminAdapter = new AdminAdapter(userModelArrayList, MenuManager.this);
+            ArrayList<UserModel> userModelArrayList1 = new ArrayList<>();
+            for (int i = 1; i < userModelArrayList.size(); i++) {
+                userModelArrayList1.add(userModelArrayList.get(i));
+            }
+            adminAdapter = new AdminAdapter(userModelArrayList1, MenuManager.this);
             recyclerView.setAdapter(adminAdapter);
             adminAdapter.notifyDataSetChanged();
         }

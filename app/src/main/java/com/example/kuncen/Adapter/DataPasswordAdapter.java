@@ -44,7 +44,7 @@ public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             textViewIdUser = itemView.findViewById(R.id.tvIdUser);
             textViewWebsiteName = itemView.findViewById(R.id.tvWebsite);
             textViewUsername = itemView.findViewById(R.id.tvUsername);
-            textViewPassword = itemView.findViewById(R.id.tvPassword);
+            textViewPassword = itemView.findViewById(R.id.tvData);
             imageViewCopyUsername = itemView.findViewById(R.id.imageViewCopyUsername);
             imageViewCopyPassword = itemView.findViewById(R.id.imageViewCopyPassword);
             imageViewRemove = itemView.findViewById(R.id.imageViewRemove);

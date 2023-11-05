@@ -6,8 +6,12 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -20,7 +24,6 @@ import com.example.kuncen.Handler.UserHandler;
 import com.example.kuncen.R;
 
 public class MainActivity extends AppCompatActivity {
-    Cursor cursor;
     private EditText etUsername, etPassword;
     private String username, pass;
     private TextView signup, donthaveAcc;
@@ -121,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    void hideKeyboard(View view) {
+    public void hideKeyboard(View view) {
         view = getCurrentFocus();
         if (view != null) {
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);

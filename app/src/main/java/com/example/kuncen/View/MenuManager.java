@@ -14,24 +14,31 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.kuncen.Adapter.AdminAdapter;
 import com.example.kuncen.Adapter.DataPasswordAdapter;
+import com.example.kuncen.Handler.AdminHandler;
 import com.example.kuncen.Handler.DataPasswordHandler;
+import com.example.kuncen.Handler.UserHandler;
 import com.example.kuncen.Model.DataModel;
+import com.example.kuncen.Model.UserModel;
 import com.example.kuncen.R;
 
 import java.util.ArrayList;
 
 
 public class MenuManager extends MainActivity {
-    private RecyclerView rvPassword;
+    private RecyclerView recyclerView;
     private ImageView imageViewAddItem;
     private Button buttonSave;
     private EditText editTextWebsite, editTextUsername, editTextPassword;
     private String name_website, username, pass;
-    private int id_user;
+    private int id_user, id_admin;
     private DataPasswordHandler dataPasswordHandler;
+    private UserHandler userHandler;
     private DataPasswordAdapter dataPasswordAdapter;
+    private AdminAdapter adminAdapter;
     private ArrayList<DataModel> dataModelArrayList;
+    private ArrayList<UserModel> userModelArrayList;
     private Bundle bundle;
 
     @Override
@@ -39,26 +46,39 @@ public class MenuManager extends MainActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_manager);
         bundle = getIntent().getExtras();
-        id_user = bundle.getInt("key_id_user");
-        rvPassword = findViewById(R.id.rvData);
+        recyclerView = findViewById(R.id.rvData);
         dataModelArrayList = new ArrayList<>();
         dataPasswordHandler = new DataPasswordHandler(this);
+        userHandler = new UserHandler(this);
         dataPasswordHandler.openRead();
-        dataModelArrayList = dataPasswordHandler.displayData(id_user);
-        dataPasswordAdapter = new DataPasswordAdapter(dataModelArrayList, MenuManager.this);
+        userHandler.openRead();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MenuManager.this, RecyclerView.VERTICAL, false);
-        rvPassword.setLayoutManager(linearLayoutManager);
-        rvPassword.setAdapter(dataPasswordAdapter);
-        dataPasswordAdapter.notifyDataSetChanged();
+        recyclerView.setLayoutManager(linearLayoutManager);
+        id_user = bundle.getInt("key_id_user");
+        id_admin = bundle.getInt("key_id_admin");
         imageViewAddItem = findViewById(R.id.imageViewAddItem);
-        imageViewAddItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hideKeyboard(v);
-                menuAddItem();
-                Toast.makeText(MenuManager.this, "" + id_user, Toast.LENGTH_SHORT).show();
-            }
-        });
+        checkMenu(id_user, id_admin);
+    }
+
+    private void checkMenu(int id_user, int id_admin) {
+        if (id_user > 0) {
+            dataModelArrayList = dataPasswordHandler.displayData(id_user);
+            dataPasswordAdapter = new DataPasswordAdapter(dataModelArrayList, MenuManager.this);
+            recyclerView.setAdapter(dataPasswordAdapter);
+            dataPasswordAdapter.notifyDataSetChanged();
+            imageViewAddItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    hideKeyboard(v);
+                    menuAddItem();
+                }
+            });
+        } else if (id_admin > 0) {
+            userModelArrayList = userHandler.displayUser();
+            adminAdapter = new AdminAdapter(userModelArrayList, MenuManager.this);
+            recyclerView.setAdapter(adminAdapter);
+            adminAdapter.notifyDataSetChanged();
+        }
     }
 
     private void menuAddItem() {
@@ -85,16 +105,22 @@ public class MenuManager extends MainActivity {
                     if (dataPasswordHandler.checkData(id_user)) {
                         Toast.makeText(MenuManager.this, "bayar dulu", Toast.LENGTH_SHORT).show();
                     } else {
-                        long insertData = DataPasswordHandler.insertDataPass(id_user, name_website, username, pass);
-                        dataPasswordAdapter.notifyDataSetChanged();
-                        Toast.makeText(MenuManager.this, "data has been add", Toast.LENGTH_SHORT).show();
-                        if (insertData != -1) {
-                            dataModelArrayList.clear();
-                            dataModelArrayList.addAll(dataPasswordHandler.displayData(id_user));
-                            editTextWebsite.setText("");
-                            editTextUsername.setText("");
-                            editTextPassword.setText("");
-                            alertDialog.dismiss();
+                        int id_data = dataPasswordHandler.readData(username);
+                        //if (userHandler.readUser(username)) {
+                        if (id_data != -1) {
+//                            Toast.makeText(MenuManager.this, "data with username " + username, Toast.LENGTH_SHORT).show();
+                        } else {
+                            long insertData = DataPasswordHandler.insertDataPass(id_user, name_website, username, pass);
+                            dataPasswordAdapter.notifyDataSetChanged();
+                            Toast.makeText(MenuManager.this, "data has been successfully added", Toast.LENGTH_SHORT).show();
+                            if (insertData != -1) {
+                                dataModelArrayList.clear();
+                                dataModelArrayList.addAll(dataPasswordHandler.displayData(id_user));
+                                editTextWebsite.setText("");
+                                editTextUsername.setText("");
+                                editTextPassword.setText("");
+                                alertDialog.dismiss();
+                            }
                         }
                     }
                 }

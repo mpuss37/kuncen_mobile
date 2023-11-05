@@ -6,8 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.inputmethodservice.Keyboard;
 
+import com.example.kuncen.Model.DataModel;
+import com.example.kuncen.Model.UserModel;
 import com.example.kuncen.View.DatabasePass;
 import com.example.kuncen.View.MainActivity;
+
+import java.util.ArrayList;
 
 public class UserHandler extends MainActivity {
     private static DatabasePass databasePass;
@@ -19,6 +23,10 @@ public class UserHandler extends MainActivity {
 
     public void openWrite() {
         sqLiteDatabase = databasePass.getWritableDatabase();
+    }
+
+    public void openRead() {
+        sqLiteDatabase = databasePass.getReadableDatabase();
     }
 
     public void close() {
@@ -33,9 +41,23 @@ public class UserHandler extends MainActivity {
     }
 
     //    public boolean readUser(String username) {
-    public int readUser(String username) {
+    public int readUser(String username, String password) {
         int id_user = -1;
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + databasePass.table_user + " WHERE " + databasePass.col_username + " = '" + username + "'", null);
+        Cursor cursor;
+        String query;
+        if (password == "null") {
+            query = "select * from " + databasePass.table_user + " where " + databasePass.col_username + " = '" + username + "'";
+        } else {
+            query = "select * from " + databasePass.table_user + " where " + databasePass.col_username + " = '" + username + "' and " + databasePass.col_pass + " = '" + password + "'";
+        }
+        cursor = sqLiteDatabase.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            id_user = cursor.getInt(0);
+        }
+
+        cursor.close();
+        return id_user;
+
 //        if (cursor.getCount() > 0) {
 //            cursor.close();
 //            return true;
@@ -43,11 +65,18 @@ public class UserHandler extends MainActivity {
 //            cursor.close();
 //            return false;
 //        }
-        if (cursor.moveToFirst()) {
-            id_user = cursor.getInt(0);
-        }
+    }
 
+    public ArrayList<UserModel> displayUser() {
+        sqLiteDatabase = databasePass.getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("select username, password from " + databasePass.table_user + "", null);
+        ArrayList<UserModel> modelArrayList = new ArrayList<>();
+        if (cursor.moveToFirst()) {
+            do {
+                modelArrayList.add(new UserModel(cursor.getString(0), cursor.getString(1)));
+            } while (cursor.moveToNext());
+        }
         cursor.close();
-        return id_user;
+        return modelArrayList;
     }
 }

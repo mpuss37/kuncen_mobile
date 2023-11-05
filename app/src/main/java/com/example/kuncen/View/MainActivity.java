@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.kuncen.Handler.AdminHandler;
 import com.example.kuncen.Handler.UserHandler;
 import com.example.kuncen.R;
 
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private Button buttonSave;
     private Intent intent;
     private UserHandler userHandler;
+    private AdminHandler adminHandler;
     private ConstraintLayout constraintLayoutMain;
 
     @Override
@@ -33,7 +35,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         userHandler = new UserHandler(this);
+        adminHandler = new AdminHandler(this);
         userHandler.openWrite();
+        adminHandler.openWrite();
         etUsername = findViewById(R.id.editTextUsername);
         etPassword = findViewById(R.id.editTextPassword);
         buttonSave = findViewById(R.id.buttonSave);
@@ -57,14 +61,14 @@ public class MainActivity extends AppCompatActivity {
                     if (username.equals("") && pass.equals("")) {
                         Toast.makeText(MainActivity.this, "Input username/pass", Toast.LENGTH_SHORT).show();
                     } else {
-                        int id_user = userHandler.readUser(username);
+                        int id_user = userHandler.readUser(username, "null");
                         if (id_user != -1) {
-                            Toast.makeText(MainActivity.this, "data has been added", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "username is already in use", Toast.LENGTH_SHORT).show();
                             etUsername.setText("");
                             etPassword.setText("");
                         } else {
                             long insertUser = userHandler.insertUser(username, pass);
-                            Toast.makeText(MainActivity.this, "data added successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "data has been successfully added", Toast.LENGTH_SHORT).show();
                             buttonSave.setText("Login");
                             donthaveAcc.setText("already have account, ");
                             signup.setText("Login");
@@ -78,13 +82,18 @@ public class MainActivity extends AppCompatActivity {
                     if (username.equals("") && pass.equals("")) {
                         Toast.makeText(MainActivity.this, "Input username/pass", Toast.LENGTH_SHORT).show();
                     } else {
-                        int id_user = userHandler.readUser(username);
-                        //if (userHandler.readUser(username)) {
+                        int id_user = userHandler.readUser(username, pass);
+                        int id_admin = adminHandler.readAdmin(username, pass);
                         if (id_user != -1) {
                             intent = new Intent(MainActivity.this, MenuManager.class);
                             intent.putExtra("key_id_user", id_user);
                             startActivity(intent);
                             Toast.makeText(MainActivity.this, "login with " + username, Toast.LENGTH_SHORT).show();
+                        } else if (id_admin != -1) {
+                            intent = new Intent(MainActivity.this, MenuManager.class);
+                            intent.putExtra("key_id_admin", id_admin);
+                            startActivity(intent);
+                            Toast.makeText(MainActivity.this, "Selamat datang " + username, Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(MainActivity.this, "error username/pass", Toast.LENGTH_SHORT).show();
                         }

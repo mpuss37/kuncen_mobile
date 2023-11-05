@@ -3,7 +3,6 @@ package com.example.kuncen.Adapter;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,18 +22,18 @@ import com.example.kuncen.View.MenuManager;
 import java.util.ArrayList;
 
 public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private ArrayList<DataModel> arrayListDataModel;
+    private ArrayList<DataModel> dataModelArrayList;
     private Context context;
     private DataPasswordHandler dataPasswordHandler;
     private MenuManager menuManager;
 
-    public DataPasswordAdapter(ArrayList<DataModel> arrayListDataModel, Context context) {
-        this.arrayListDataModel = arrayListDataModel;
+    public DataPasswordAdapter(ArrayList<DataModel> dataModelArrayList, Context context) {
+        this.dataModelArrayList = dataModelArrayList;
         this.context = context;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView textViewIdData, textViewWebsiteName, textViewUsername, textViewPassword;
+        private TextView textViewIdData, textViewIdUser, textViewWebsiteName, textViewUsername, textViewPassword;
         private ImageView imageViewCopyUsername, imageViewCopyPassword, imageViewRemove;
         private ConstraintLayout constraintLayoutItem;
 
@@ -42,7 +41,8 @@ public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             super(itemView);
             constraintLayoutItem = itemView.findViewById(R.id.clItem);
             textViewIdData = itemView.findViewById(R.id.tvIdData);
-            textViewWebsiteName = itemView.findViewById(R.id.tvNameWebsite);
+            textViewIdUser = itemView.findViewById(R.id.tvIdUser);
+            textViewWebsiteName = itemView.findViewById(R.id.tvWebsite);
             textViewUsername = itemView.findViewById(R.id.tvUsername);
             textViewPassword = itemView.findViewById(R.id.tvPassword);
             imageViewCopyUsername = itemView.findViewById(R.id.imageViewCopyUsername);
@@ -60,29 +60,28 @@ public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        DataModel dataModel = arrayListDataModel.get(position);
+        DataModel dataModel = dataModelArrayList.get(position);
         dataPasswordHandler = new DataPasswordHandler(context);
         menuManager = new MenuManager();
         dataPasswordHandler.openWrite();
         if (holder instanceof ViewHolder) {
             ViewHolder viewHolder = (ViewHolder) holder;
-            String id = String.valueOf(dataModel.getId_data());
-            viewHolder.textViewIdData.setText(id);
+            viewHolder.textViewIdUser.setText(String.valueOf(dataModel.getId_user()));
             viewHolder.textViewWebsiteName.setText(dataModel.getName_website());
             viewHolder.textViewUsername.setText(dataModel.getUsername());
             viewHolder.textViewPassword.setText(dataModel.getPassword());
 
-            String id_data, username, password;
-            id_data = viewHolder.textViewIdData.getText().toString();
+            String website, username, password;
+            website = viewHolder.textViewWebsiteName.getText().toString();
             username = viewHolder.textViewUsername.getText().toString();
             password = viewHolder.textViewPassword.getText().toString();
-
+            int id = dataPasswordHandler.checkIdData(website, username, password);
             viewHolder.imageViewRemove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    arrayListDataModel.remove(holder.getAdapterPosition());
-                    dataPasswordHandler.deleteData(Integer.parseInt(id_data));
-                    Toast.makeText(context, "data has been delete, Username : " + username, Toast.LENGTH_SHORT).show();
+                    dataModelArrayList.remove(holder.getAdapterPosition());
+                    dataPasswordHandler.deleteData(((id)));
+                    Toast.makeText(context, "data has been delete, Username : " + id, Toast.LENGTH_SHORT).show();
                     notifyItemRemoved(holder.getAdapterPosition());
                 }
             });
@@ -103,14 +102,13 @@ public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }
             });
 
-            viewHolder.constraintLayoutItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    saveClipboard(password);
-                    Toast.makeText(context, "data password has been copy, Username : " + username, Toast.LENGTH_SHORT).show();
-                }
-            });
-
+//            viewHolder.constraintLayoutItem.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    saveClipboard(password);
+//                    Toast.makeText(context, "data password has been copy, Username : " + username, Toast.LENGTH_SHORT).show();
+//                }
+//            });
         }
 
     }
@@ -123,7 +121,7 @@ public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemCount() {
-        return arrayListDataModel.size();
+        return dataModelArrayList.size();
     }
 
 }

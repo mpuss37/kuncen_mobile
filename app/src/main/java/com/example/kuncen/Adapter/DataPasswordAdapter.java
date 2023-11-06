@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kuncen.Handler.DataPasswordHandler;
 import com.example.kuncen.Model.DataModel;
+import com.example.kuncen.Model.UserModel;
 import com.example.kuncen.R;
 import com.example.kuncen.View.MenuManager;
 
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 
 public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<DataModel> dataModelArrayList;
+    private ArrayList<UserModel> userModelArrayList;
     private Context context;
     private DataPasswordHandler dataPasswordHandler;
     private MenuManager menuManager;
@@ -33,21 +35,21 @@ public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView textViewIdData, textViewIdUser, textViewWebsiteName, textViewUsername, textViewPassword;
+        private TextView textViewIdUser, textViewWebsiteName, textViewUsername, textViewPassword;
         private ImageView imageViewCopyUsername, imageViewCopyPassword, imageViewRemove;
         private ConstraintLayout constraintLayoutItem;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             constraintLayoutItem = itemView.findViewById(R.id.clItem);
-            textViewIdData = itemView.findViewById(R.id.tvIdData);
             textViewIdUser = itemView.findViewById(R.id.tvIdUser);
             textViewWebsiteName = itemView.findViewById(R.id.tvWebsite);
             textViewUsername = itemView.findViewById(R.id.tvUsername);
-            textViewPassword = itemView.findViewById(R.id.tvData);
+            textViewPassword = itemView.findViewById(R.id.tvPassword);
             imageViewCopyUsername = itemView.findViewById(R.id.imageViewCopyUsername);
             imageViewCopyPassword = itemView.findViewById(R.id.imageViewCopyPassword);
             imageViewRemove = itemView.findViewById(R.id.imageViewRemove);
+            constraintLayoutItem = itemView.findViewById(R.id.clItem);
         }
     }
 
@@ -102,13 +104,13 @@ public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }
             });
 
-//            viewHolder.constraintLayoutItem.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    saveClipboard(password);
-//                    Toast.makeText(context, "data password has been copy, Username : " + username, Toast.LENGTH_SHORT).show();
-//                }
-//            });
+            viewHolder.constraintLayoutItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    saveClipboard(password);
+                    Toast.makeText(context, "data password has been copy, Username : " + username, Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
     }

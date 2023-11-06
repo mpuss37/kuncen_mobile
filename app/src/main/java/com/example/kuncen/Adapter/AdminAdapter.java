@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.kuncen.Handler.DataPasswordHandler;
 import com.example.kuncen.Handler.UserHandler;
 import com.example.kuncen.Model.UserModel;
 import com.example.kuncen.R;
@@ -22,9 +23,10 @@ import com.example.kuncen.View.MenuManager;
 import java.util.ArrayList;
 
 public class AdminAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private ArrayList<UserModel> userModelArrayList;
-    private Context context;
+    private final ArrayList<UserModel> userModelArrayList;
+    private final Context context;
     private UserHandler userHandler;
+    private DataPasswordHandler dataPasswordHandler;
     private MenuManager menuManager;
 
     public AdminAdapter(ArrayList<UserModel> userModelArrayList, Context context) {
@@ -33,7 +35,7 @@ public class AdminAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView textViewIdUser, textViewUsername, textViewData;
+        private TextView textViewIdUser, textViewUsername, textViewData, textViewPremium;
         private ImageView imageViewCopy, imageViewCopy1, imageViewRemove;
         private ConstraintLayout constraintLayoutItem;
 
@@ -42,7 +44,8 @@ public class AdminAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             constraintLayoutItem = itemView.findViewById(R.id.clItem);
             textViewIdUser = itemView.findViewById(R.id.tvIdUser);
             textViewUsername = itemView.findViewById(R.id.tvUsername);
-            textViewData = itemView.findViewById(R.id.tvData);
+            textViewData = itemView.findViewById(R.id.tvPassword);
+            textViewPremium = itemView.findViewById(R.id.tvPremium);
             imageViewRemove = itemView.findViewById(R.id.imageViewRemove);
             imageViewCopy1 = itemView.findViewById(R.id.imageViewCopyUsername);
             imageViewCopy = itemView.findViewById(R.id.imageViewCopyPassword);
@@ -60,12 +63,17 @@ public class AdminAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         UserModel userModel = userModelArrayList.get(position);
         userHandler = new UserHandler(context);
+        dataPasswordHandler = new DataPasswordHandler(context);
+        userHandler.openRead();
         menuManager = new MenuManager();
+        int countData = dataPasswordHandler.countData(userModel.getId_user());
         userHandler.openWrite();
         if (holder instanceof ViewHolder) {
             ViewHolder viewHolder = (ViewHolder) holder;
             viewHolder.textViewUsername.setText(userModel.getUsername());
-            viewHolder.textViewData.setText(userModel.getPassword());
+            viewHolder.textViewData.setText("total data : "+String.valueOf(countData));
+            viewHolder.textViewPremium.setText("gurung premium");
+            viewHolder.textViewIdUser.setVisibility(View.GONE);
             viewHolder.imageViewCopy1.setVisibility(View.GONE);
             viewHolder.imageViewCopy.setVisibility(View.GONE);
             String username;

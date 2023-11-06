@@ -4,9 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.inputmethodservice.Keyboard;
 
-import com.example.kuncen.Model.DataModel;
 import com.example.kuncen.Model.UserModel;
 import com.example.kuncen.View.DatabasePass;
 import com.example.kuncen.View.MainActivity;
@@ -17,6 +15,9 @@ public class UserHandler extends MainActivity {
     private static DatabasePass databasePass;
     private SQLiteDatabase sqLiteDatabase;
     private ContentValues contentValues;
+    private String whereClause;
+    private Cursor cursor;
+    private ArrayList<UserModel> modelArrayList = new ArrayList<>();
 
     public UserHandler(Context context) {
         databasePass = new DatabasePass(context);
@@ -44,7 +45,6 @@ public class UserHandler extends MainActivity {
     //    public boolean readUser(String username) {
     public int readUser(String username, String password) {
         int id_user = -1;
-        Cursor cursor;
         String query;
         if (password == "null") {
             query = "select * from " + databasePass.table_user + " where " + databasePass.col_username + " = '" + username + "'";
@@ -71,17 +71,16 @@ public class UserHandler extends MainActivity {
     public int deleteUser(String username) {
         contentValues = new ContentValues();
         UserHandler.this.contentValues.put(databasePass.col_username, username);
-        String whereClause = databasePass.col_username + " = '" + username + "'";
+        whereClause = databasePass.col_username + " = '" + username + "'";
         return sqLiteDatabase.delete(databasePass.table_user, whereClause, null);
     }
 
     public ArrayList<UserModel> displayUser() {
         sqLiteDatabase = databasePass.getReadableDatabase();
-        Cursor cursor = sqLiteDatabase.rawQuery("select username, password from " + databasePass.table_user + "", null);
-        ArrayList<UserModel> modelArrayList = new ArrayList<>();
+        cursor = sqLiteDatabase.rawQuery("select id_user, username, password from " + databasePass.table_user + "", null);
         if (cursor.moveToFirst()) {
             do {
-                modelArrayList.add(new UserModel(cursor.getString(0), cursor.getString(1)));
+                modelArrayList.add(new UserModel(cursor.getInt(0), cursor.getString(1), cursor.getString(2)));
             } while (cursor.moveToNext());
         }
         cursor.close();

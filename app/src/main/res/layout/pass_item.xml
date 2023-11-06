@@ -47,28 +47,15 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvIdData"
+        android:id="@+id/tvPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:fontFamily="sans-serif"
-        android:text="tvIdData"
-        android:textColor="#000000"
-        android:visibility="gone"
-        app:layout_constraintStart_toEndOf="@+id/tvIdUser"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvData"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:fontFamily="sans-serif"
         android:text="tvPassword"
         android:textColor="#000000"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tvData" />
+        app:layout_constraintBottom_toBottomOf="@+id/tvWebsite"
+        app:layout_constraintStart_toEndOf="@+id/tvWebsite" />
 
     <ImageView
         android:id="@+id/imageViewRemove"

@@ -54,7 +54,7 @@ public class HistoryHandler extends MainActivity {
         ArrayList<UserModel> modelArrayList = new ArrayList<>();
         if (cursor.moveToFirst()) {
             do {
-                modelArrayList.add(new UserModel(cursor.getString(0), cursor.getString(1)));
+//                modelArrayList.add(new UserModel(cursor.getString(1), cursor.getString(2)));
             } while (cursor.moveToNext());
         }
         cursor.close();

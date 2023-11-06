@@ -53,7 +53,7 @@ public class DataPasswordHandler extends MainActivity {
         return sqLiteDatabase.update(databasePass.table_data, contentValues, whereClause, whereArgs);
     }
 
-    public int readData(String username){
+    public int readData(String username) {
         int id_data = -1;
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + databasePass.table_data + " WHERE " + databasePass.col_website_username + " = '" + username + "'", null);
         if (cursor.moveToFirst()) {
@@ -65,6 +65,13 @@ public class DataPasswordHandler extends MainActivity {
 
     public void deleteData(int id_data) {
         sqLiteDatabase.delete(databasePass.table_data, " id_data = " + id_data, null);
+    }
+
+    public int countData(int id_user) {
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + databasePass.table_data + " where id_user = '" + id_user + "'", null);
+        int jumlah = cursor.getCount();
+        cursor.close();
+        return jumlah;
     }
 
     public int checkIdData(String website, String username, String password) {

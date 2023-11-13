@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.kuncen.EncryptionKey.HashingKey;
 import com.example.kuncen.Model.UserModel;
 import com.example.kuncen.View.DatabasePass;
 import com.example.kuncen.View.MainActivity;
@@ -15,6 +16,7 @@ public class UserHandler extends MainActivity {
     private static DatabasePass databasePass;
     private SQLiteDatabase sqLiteDatabase;
     private ContentValues contentValues;
+    private HashingKey hashingKey;
     private String whereClause;
     private Cursor cursor;
     private ArrayList<UserModel> modelArrayList = new ArrayList<>();
@@ -44,6 +46,7 @@ public class UserHandler extends MainActivity {
 
     //    public boolean readUser(String username) {
     public int readUser(String username, String password) {
+        hashingKey = new HashingKey();
         int id_user = -1;
         String query;
         if (password == "null") {

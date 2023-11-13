@@ -5,105 +5,123 @@
     android:id="@+id/clItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
+    android:background="#f2f2f2"
+    android:padding="14dp"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/tvPremium"
-        android:layout_width="wrap_content"
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:fontFamily="sans-serif"
-        android:text="Premium"
-        android:textAlignment="gravity"
-        android:textColor="#000000"
-        app:layout_constraintBottom_toBottomOf="@+id/tvUsername"
-        app:layout_constraintStart_toEndOf="@+id/tvUsername"
-        app:layout_constraintTop_toTopOf="@+id/tvUsername" />
-
-    <TextView
-        android:id="@+id/tvUsername"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="12dp"
-        android:text="Username"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/tvPassword"
-        app:layout_constraintStart_toEndOf="@+id/imageView4"
-        app:layout_constraintTop_toTopOf="@+id/imageView4" />
-
-    <TextView
-        android:id="@+id/tvPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="12dp"
-        android:fontFamily="sans-serif"
-        android:text="Data"
-        android:textAlignment="gravity"
-        android:textColor="#000000"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
-        app:layout_constraintStart_toEndOf="@+id/imageView4"
-        app:layout_constraintTop_toBottomOf="@+id/tvUsername" />
-
-    <TextView
-        android:id="@+id/tvIdUser"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:fontFamily="sans-serif"
-        android:text="tvIdUser"
-        android:textColor="#000000"
-        android:visibility="gone"
-        app:layout_constraintStart_toEndOf="@+id/tvUsername"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageViewRemove"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_margin="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/remove" />
-
-    <ImageView
-        android:id="@+id/imageViewCopyPassword"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_margin="10dp"
-        android:layout_marginEnd="20dp"
-        android:tint="#FF0000"
-        app:layout_constraintBottom_toBottomOf="@+id/imageViewRemove"
-        app:layout_constraintEnd_toStartOf="@+id/imageViewRemove"
-        app:layout_constraintTop_toTopOf="@+id/imageViewRemove"
-        app:srcCompat="@drawable/copy"
-        tools:ignore="UseAppTint" />
-
-    <ImageView
-        android:id="@+id/imageViewCopyUsername"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_margin="10dp"
-        android:layout_marginEnd="20dp"
-        android:tint="#FF0000"
-        app:layout_constraintBottom_toBottomOf="@+id/imageViewCopyPassword"
-        app:layout_constraintEnd_toStartOf="@+id/imageViewCopyPassword"
-        app:layout_constraintTop_toTopOf="@+id/imageViewCopyPassword"
-        app:srcCompat="@drawable/copy"
-        tools:ignore="UseAppTint" />
-
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/lock"
-        app:tint="#FF0000" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tvPremium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:fontFamily="sans-serif"
+                android:text="Premium"
+                android:textAlignment="gravity"
+                android:textColor="#000000"
+                app:layout_constraintBottom_toBottomOf="@+id/tvWebsite"
+                app:layout_constraintStart_toEndOf="@+id/tvWebsite"
+                app:layout_constraintTop_toTopOf="@+id/tvWebsite" />
+
+            <TextView
+                android:id="@+id/tvWebsite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:text="Username"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/tvPassword"
+                app:layout_constraintStart_toEndOf="@+id/imageView4"
+                app:layout_constraintTop_toTopOf="@+id/imageView4" />
+
+            <TextView
+                android:id="@+id/tvPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:fontFamily="sans-serif"
+                android:text="Data"
+                android:textAlignment="gravity"
+                android:textColor="#000000"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+                app:layout_constraintStart_toEndOf="@+id/imageView4"
+                app:layout_constraintTop_toBottomOf="@+id/tvWebsite" />
+
+            <TextView
+                android:id="@+id/tvIdUser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:fontFamily="sans-serif"
+                android:text="tvIdUser"
+                android:textColor="#000000"
+                android:visibility="gone"
+                app:layout_constraintStart_toEndOf="@+id/tvWebsite"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageViewRemove"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_margin="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/remove" />
+
+            <ImageView
+                android:id="@+id/imageViewCopyPassword"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_margin="10dp"
+                android:layout_marginEnd="20dp"
+                android:tint="#FF0000"
+                app:layout_constraintBottom_toBottomOf="@+id/imageViewRemove"
+                app:layout_constraintEnd_toStartOf="@+id/imageViewRemove"
+                app:layout_constraintTop_toTopOf="@+id/imageViewRemove"
+                app:srcCompat="@drawable/copy"
+                tools:ignore="UseAppTint" />
+
+            <ImageView
+                android:id="@+id/imageViewCopyUsername"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_margin="10dp"
+                android:layout_marginEnd="20dp"
+                android:tint="#FF0000"
+                app:layout_constraintBottom_toBottomOf="@+id/imageViewCopyPassword"
+                app:layout_constraintEnd_toStartOf="@+id/imageViewCopyPassword"
+                app:layout_constraintTop_toTopOf="@+id/imageViewCopyPassword"
+                app:srcCompat="@drawable/copy"
+                tools:ignore="UseAppTint" />
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/lock"
+                app:tint="#FF0000" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

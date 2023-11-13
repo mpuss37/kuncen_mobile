@@ -43,7 +43,7 @@ public class AdminAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             super(itemView);
             constraintLayoutItem = itemView.findViewById(R.id.clItem);
             textViewIdUser = itemView.findViewById(R.id.tvIdUser);
-            textViewUsername = itemView.findViewById(R.id.tvUsername);
+            textViewUsername = itemView.findViewById(R.id.tvWebsite);
             textViewData = itemView.findViewById(R.id.tvPassword);
             textViewPremium = itemView.findViewById(R.id.tvPremium);
             imageViewRemove = itemView.findViewById(R.id.imageViewRemove);
@@ -83,7 +83,7 @@ public class AdminAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 public void onClick(View v) {
                     userModelArrayList.remove(holder.getAdapterPosition());
                     userHandler.deleteUser(username);
-                    Toast.makeText(context, "data has delete, Username : " + username, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "delete, Username : " + username, Toast.LENGTH_SHORT).show();
                     notifyItemRemoved(holder.getAdapterPosition());
                 }
             });

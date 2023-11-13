@@ -8,19 +8,19 @@ import java.security.Key;
 import java.util.Base64;
 
 public class HashingKey {
-    public static SecretKey generateAESKeyFromHexString(String hexString) {
+    private static SecretKey generateAESKeyFromHexString(String hexString) {
         byte[] keyBytes = hexStringToBytes(hexString);
         return new SecretKeySpec(keyBytes, 0, keyBytes.length, "AES");
     }
 
-    public static String encrypt(String plaintext, Key key) throws Exception {
+    public String encrypt(String plaintext, Key key) throws Exception {
         Cipher cipher = Cipher.getInstance("AES");
         cipher.init(Cipher.ENCRYPT_MODE, key);
         byte[] encryptedBytes = cipher.doFinal(plaintext.getBytes(StandardCharsets.UTF_8));
         return Base64.getEncoder().encodeToString(encryptedBytes);
     }
 
-    public static String decrypt(String encryptedText, Key key) throws Exception {
+    public String decrypt(String encryptedText, Key key) throws Exception {
         Cipher cipher = Cipher.getInstance("AES");
         cipher.init(Cipher.DECRYPT_MODE, key);
         byte[] encryptedBytes = Base64.getDecoder().decode(encryptedText);
@@ -28,7 +28,7 @@ public class HashingKey {
         return new String(decryptedBytes, StandardCharsets.UTF_8);
     }
 
-    public static String bytesToHex(byte[] bytes) {
+    public String bytesToHex(byte[] bytes) {
         StringBuilder hexString = new StringBuilder();
         for (byte b : bytes) {
             hexString.append(String.format("%02x", b));
@@ -47,25 +47,25 @@ public class HashingKey {
         return data;
     }
 
-    public static SecretKey keyFromHexString(String hexString) {
+    public SecretKey keyFromHexString(String hexString) {
         byte[] keyBytes = hexStringToBytes(hexString);
         return new SecretKeySpec(keyBytes, 0, keyBytes.length, "AES");
     }
 
 
-    public static void main(String[] args) {
-        try {
-            String key = "a3271802a5318fb310c94d6f28943212";
-//            SecretKey secretKey = generateAESKeyFromHexString(key);
-            SecretKey secretKey = keyFromHexString(key);
-            String keyString = bytesToHex(secretKey.getEncoded());
-            System.out.println(secretKey);
-            System.out.println(keyString);
-//            String enkrip = encrypt("herdi", secretKey);
-//            System.out.println("ini enkrip " + enkrip);
-//            System.out.println("ini dekrip " + decrypt("LA40AD4JPVLDHwp0f64nag==", secretKey));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    public void main(String[] args) {
+//        try {
+//            String key = "a3271802a5318fb310c94d6f28943212";
+////            SecretKey secretKey = generateAESKeyFromHexString(key);
+//            SecretKey secretKey = keyFromHexString(key);
+////            String keyString = bytesToHex(secretKey.getEncoded());
+//            System.out.println(secretKey);
+////            System.out.println(keyString);
+////            String enkrip = encrypt("herdi", secretKey);
+////            System.out.println("ini enkrip " + enkrip);
+////            System.out.println("ini dekrip " + decrypt("LA40AD4JPVLDHwp0f64nag==", secretKey));
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 }

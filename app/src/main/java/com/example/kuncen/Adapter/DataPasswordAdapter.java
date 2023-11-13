@@ -14,10 +14,12 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.kuncen.EncryptionKey.HashingKey;
 import com.example.kuncen.Handler.DataPasswordHandler;
 import com.example.kuncen.Model.DataModel;
 import com.example.kuncen.Model.UserModel;
 import com.example.kuncen.R;
+import com.example.kuncen.View.MainActivity;
 import com.example.kuncen.View.MenuManager;
 
 import java.util.ArrayList;
@@ -28,6 +30,8 @@ public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private Context context;
     private DataPasswordHandler dataPasswordHandler;
     private MenuManager menuManager;
+    private HashingKey hashingKey;
+    private MainActivity mainActivity;
 
     public DataPasswordAdapter(ArrayList<DataModel> dataModelArrayList, Context context) {
         this.dataModelArrayList = dataModelArrayList;
@@ -62,6 +66,8 @@ public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        hashingKey = new HashingKey();
+        mainActivity = new MainActivity();
         DataModel dataModel = dataModelArrayList.get(position);
         dataPasswordHandler = new DataPasswordHandler(context);
         menuManager = new MenuManager();
@@ -71,8 +77,11 @@ public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             viewHolder.textViewIdUser.setText(String.valueOf(dataModel.getId_user()));
             viewHolder.textViewWebsiteName.setText(dataModel.getName_website());
             viewHolder.textViewUsername.setText(dataModel.getUsername());
-            viewHolder.textViewPassword.setText(dataModel.getPassword());
-
+            try {
+                String passDecrypt = hashingKey.decrypt(dataModel.getPassword(), mainActivity.secretKey);
+                viewHolder.textViewPassword.setText(passDecrypt);
+            } catch (Exception e) {
+            }
             String website, username, password;
             website = viewHolder.textViewWebsiteName.getText().toString();
             username = viewHolder.textViewUsername.getText().toString();
@@ -83,7 +92,7 @@ public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 public void onClick(View v) {
                     dataModelArrayList.remove(holder.getAdapterPosition());
                     dataPasswordHandler.deleteData(((id)));
-                    Toast.makeText(context, "data has been delete, Username : " + id, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "delete, Username : " + username, Toast.LENGTH_SHORT).show();
                     notifyItemRemoved(holder.getAdapterPosition());
                 }
             });
@@ -92,7 +101,7 @@ public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 @Override
                 public void onClick(View v) {
                     saveClipboard(username);
-                    Toast.makeText(context, "data username has been copy, " + username, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "username has been copy", Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -100,7 +109,7 @@ public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 @Override
                 public void onClick(View v) {
                     saveClipboard(password);
-                    Toast.makeText(context, "data password has been copy, Username : " + username, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "password has been copy, Username : " + username, Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -108,7 +117,7 @@ public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 @Override
                 public void onClick(View v) {
                     saveClipboard(password);
-                    Toast.makeText(context, "data password has been copy, Username : " + username, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "password has been copy, Username : " + username, Toast.LENGTH_SHORT).show();
                 }
             });
         }

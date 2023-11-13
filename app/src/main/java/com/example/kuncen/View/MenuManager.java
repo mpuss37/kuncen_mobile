@@ -73,6 +73,7 @@ public class MenuManager extends MainActivity {
             @Override
             public void onClick(View v) {
                 intent = new Intent(MenuManager.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
             }

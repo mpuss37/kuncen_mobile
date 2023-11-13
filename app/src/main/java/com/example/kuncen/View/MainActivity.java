@@ -99,12 +99,14 @@ public class MainActivity extends AppCompatActivity {
                         int id_admin = adminHandler.readAdmin(username, pass);
                         if (id_user != -1) {
                             intent = new Intent(MainActivity.this, MenuManager.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             intent.putExtra("key_id_user", id_user);
                             startActivity(intent);
                             finish();
                             Toast.makeText(MainActivity.this, "login with " + username, Toast.LENGTH_SHORT).show();
                         } else if (id_admin != -1) {
                             intent = new Intent(MainActivity.this, MenuManager.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             intent.putExtra("key_id_admin", id_admin);
                             startActivity(intent);
                             finish();

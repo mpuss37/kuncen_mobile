@@ -6,6 +6,34 @@
     android:layout_height="match_parent"
     tools:context=".View.MenuManager">
 
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawerSideMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/navSideView"
+            android:layout_gravity="start"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:headerLayout="@layout/side_header"
+            app:menu="@menu/side_body_menu" >
+
+            <TextView
+                android:id="@+id/textViewDaySubs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:text="0 Day"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+        </com.google.android.material.navigation.NavigationView>
+    </androidx.drawerlayout.widget.DrawerLayout>
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
@@ -22,19 +50,19 @@
 
             <ImageView
                 android:id="@+id/imageViewProfile"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="32dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/history"
+                app:srcCompat="@drawable/user"
                 app:tint="#F34235" />
 
             <ImageView
                 android:id="@+id/imageViewAdd"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -44,8 +72,8 @@
 
             <ImageView
                 android:id="@+id/imageViewHome"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="10dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -84,7 +112,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:text="History"
+                android:text="Profile"
                 android:textColor="#000000"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -100,6 +128,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="#EAEAEA"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/cardView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -109,6 +138,7 @@
             android:id="@+id/rvData"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.view.Display;
 
 import com.example.kuncen.Model.DataModel;
 import com.example.kuncen.View.DatabasePass;
@@ -63,12 +62,12 @@ public class DataPasswordHandler extends MainActivity {
         return id_data;
     }
 
-    public void deleteData(int id_data) {
-        sqLiteDatabase.delete(databasePass.table_data, " id_data = " + id_data, null);
+    public void deleteData(String username) {
+        sqLiteDatabase.delete(databasePass.table_data, databasePass.col_website_username + " = '" + username + "'", null);
     }
 
     public int countData(int id_user) {
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + databasePass.table_data + " where id_user = '" + id_user + "'", null);
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT id_data FROM " + databasePass.table_data + " where id_user = '" + id_user + "'", null);
         int jumlah = cursor.getCount();
         cursor.close();
         return jumlah;
@@ -90,7 +89,7 @@ public class DataPasswordHandler extends MainActivity {
 
     public boolean checkData(int id_user) {
         Cursor cursor = sqLiteDatabase.rawQuery("select id_data from " + databasePass.table_data + " where id_user = " + id_user, null);
-        if (cursor.getCount() >= 3) {
+        if (cursor.getCount() >= 4) {
             cursor.close();
             return true;
         } else {

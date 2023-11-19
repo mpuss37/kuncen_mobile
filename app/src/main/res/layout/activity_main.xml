@@ -23,8 +23,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:fontFamily="@font/jetbrains_mono_semibold"
+        android:shadowColor="@color/black"
         android:text="Kuncen"
-        android:textColor="#000000"
+        android:textColor="#FF0000"
         android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="@+id/imageView2"
         app:layout_constraintHorizontal_bias="0.488"
@@ -37,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:fontFamily="@font/jetbrains_mono_semibold"
-        android:text="Input your username and password"
+        android:text="Input your Username and Password"
         android:textColor="#000000"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@+id/textView"
@@ -64,6 +65,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="20dp"
+        app:boxBackgroundColor="@color/white"
+        app:boxStrokeColor="@color/red_main"
+        app:boxStrokeWidth="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayoutUsername">
@@ -75,8 +79,8 @@
             android:fontFamily="@font/jetbrains_mono_semibold"
             android:hint="Password"
             android:inputType="textPassword"
-            android:text="admin"
-            android:textColorHint="#000000" />
+            android:text="herdi"
+            android:textColor="@color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -85,6 +89,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:layout_marginTop="28dp"
+        app:boxBackgroundColor="@color/white"
+        app:boxStrokeColor="@color/red_main"
+        app:boxStrokeWidth="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TextView">
@@ -95,8 +102,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/jetbrains_mono_semibold"
             android:hint="Username"
-            android:text="admin"
-            android:textColorHint="#000000" />
+            android:text="herdi"
+            android:textColor="@color/black" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

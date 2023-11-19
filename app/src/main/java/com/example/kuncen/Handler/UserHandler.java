@@ -37,11 +37,11 @@ public class UserHandler extends MainActivity {
         databasePass.close();
     }
 
-    public long insertUser(String username, String password) {
+    public long insertUser(String username, String password, String date) {
         contentValues = new ContentValues();
         contentValues.put(databasePass.col_username, username);
         contentValues.put(databasePass.col_pass, password);
-        return sqLiteDatabase.insert(databasePass.table_user, null, contentValues);
+        return sqLiteDatabase.insert( databasePass.table_user, null, contentValues);
     }
 
     //    public boolean readUser(String username) {

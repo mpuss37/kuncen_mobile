@@ -1,15 +1,11 @@
 package com.example.kuncen.Handler;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.kuncen.Model.UserModel;
 import com.example.kuncen.View.DatabasePass;
 import com.example.kuncen.View.MainActivity;
-
-import java.util.ArrayList;
 
 public class AdminHandler extends MainActivity {
     private static DatabasePass databasePass;
@@ -21,6 +17,10 @@ public class AdminHandler extends MainActivity {
 
     public void openWrite() {
         sqLiteDatabase = databasePass.getWritableDatabase();
+    }
+
+    public void openRead() {
+        sqLiteDatabase = databasePass.getReadableDatabase();
     }
 
     public void close() {

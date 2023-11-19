@@ -82,16 +82,14 @@ public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 viewHolder.textViewPassword.setText(passDecrypt);
             } catch (Exception e) {
             }
-            String website, username, password;
-            website = viewHolder.textViewWebsiteName.getText().toString();
+            String username, password;
             username = viewHolder.textViewUsername.getText().toString();
             password = viewHolder.textViewPassword.getText().toString();
-            int id = dataPasswordHandler.checkIdData(website, username, password);
             viewHolder.imageViewRemove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     dataModelArrayList.remove(holder.getAdapterPosition());
-                    dataPasswordHandler.deleteData(((id)));
+                    dataPasswordHandler.deleteData(dataModel.getUsername());
                     Toast.makeText(context, "delete, Username : " + username, Toast.LENGTH_SHORT).show();
                     notifyItemRemoved(holder.getAdapterPosition());
                 }
@@ -124,7 +122,7 @@ public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     }
 
-    private void saveClipboard(String item) {
+    public void saveClipboard(String item) {
         ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(context.CLIPBOARD_SERVICE);
         ClipData clipData = ClipData.newPlainText("username_clipboard", item);
         clipboardManager.setPrimaryClip(clipData);

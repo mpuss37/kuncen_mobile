@@ -5,16 +5,16 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.kuncen.Model.DataModel;
 import com.example.kuncen.View.DatabasePass;
 import com.example.kuncen.View.MainActivity;
 
-import java.util.ArrayList;
+import java.time.LocalDate;
 
 public class SubscriptionHandler extends MainActivity {
     private static ContentValues contentValues;
     private static DatabasePass databasePass;
     private static SQLiteDatabase sqLiteDatabase;
+    private Cursor cursor;
 
     public SubscriptionHandler(Context context) {
         databasePass = new DatabasePass(context);
@@ -43,14 +43,28 @@ public class SubscriptionHandler extends MainActivity {
         return sqLiteDatabase.insert(databasePass.table_subscription, null, contentValues);
     }
 
-    public int readSubs(int id_user) {
+    public int readId(int id_user) {
         int id_subs = -1;
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT id_subscription FROM " + databasePass.table_subscription + " WHERE id_user = '" + id_user + "'", null);
+        cursor = sqLiteDatabase.rawQuery("SELECT id_subscription FROM " + databasePass.table_subscription + " WHERE id_user = '" + id_user + "'", null);
         if (cursor.moveToFirst()) {
             id_subs = cursor.getInt(0);
         }
         cursor.close();
         return id_subs;
+    }
+
+    public LocalDate readDateEnd(int id_user){
+        LocalDate localDateNow = LocalDate.now();
+        cursor = sqLiteDatabase.rawQuery("SELECT "+databasePass.col_date_end+" FROM " + databasePass.table_subscription + " WHERE id_user = '" + id_user + "'", null);
+        if (cursor.moveToFirst()) {
+            localDateNow = LocalDate.parse(cursor.getString(0));
+        }
+        cursor.close();
+        return localDateNow;
+    }
+
+    public void deleteSubs(int id_user){
+        sqLiteDatabase.delete(databasePass.table_subscription," id_user = '" + id_user + "'", null);
     }
 
 }

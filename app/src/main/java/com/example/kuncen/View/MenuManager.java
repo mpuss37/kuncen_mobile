@@ -33,8 +33,6 @@ import com.example.kuncen.R;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
 
-import org.w3c.dom.Text;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Random;
@@ -62,9 +60,8 @@ public class MenuManager extends MainActivity {
     private AdminAdapter adminAdapter;
     private ArrayList<DataModel> dataModelArrayList;
     private ArrayList<UserModel> userModelArrayList;
-    Bundle bundle;
     private View view;
-    private LocalDate dateStart = LocalDate.now(), dateEnd;
+    private LocalDate dateStart = LocalDate.now(), datePlus30 = dateStart.plusDays(2), dateEnd;
     private Random randomText;
     private HashingKey hashingKey;
 
@@ -72,9 +69,9 @@ public class MenuManager extends MainActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_manager);
-        bundle = getIntent().getExtras();
         getSupportActionBar().show();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Bundle bundle = getIntent().getExtras();
         recyclerView = findViewById(R.id.rvData);
         scrollView = findViewById(R.id.svMenuManager);
         dataModelArrayList = new ArrayList<>();
@@ -87,10 +84,9 @@ public class MenuManager extends MainActivity {
         userHandler.openRead();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MenuManager.this, RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
-
-        id_user = bundle.getInt("key_id_user");
         int id_admin = bundle.getInt("key_id_admin");
         keyUsername = bundle.getString("key_username");
+        id_user = bundle.getInt("key_id_user");
         navigationViewSideMenu = findViewById(R.id.navSideView);
         view = navigationViewSideMenu.getHeaderView(0);
         textViewUsernameSideHeader = view.findViewById(R.id.textView9);
@@ -152,12 +148,22 @@ public class MenuManager extends MainActivity {
         });
     }
 
-    private void checkDate(int id_user) {
-        int id_subs = subscriptionHandler.readSubs(id_user);
+    public int checkDate(int id_user) {
+        int id_subs = subscriptionHandler.readId(id_user);
+        LocalDate localeDateSubs = subscriptionHandler.readDateEnd(id_user);
+        String localDateParse = localeDateSubs.toString();
         if (id_subs != -1) {
-            textViewDaySubs.setText("30 Days");
-            textViewTierSideHeader.setText("Premium");
+//            2023-09-09
+            if (dateStart.isBefore(localeDateSubs)) {
+                textViewDaySubs.setText(localeDateSubs.toString());
+                textViewTierSideHeader.setText("Premium");
+            } else {
+                subscriptionHandler.deleteSubs(id_user);
+                textViewDaySubs.setText("0");
+                textViewTierSideHeader.setText("Standard");
+            }
         }
+        return id_subs;
     }
 
 
@@ -237,7 +243,7 @@ public class MenuManager extends MainActivity {
                     if (name_website.equals("") && username.equals("") && pass.equals("")) {
                         Toast.makeText(MenuManager.this, "Input username/pass", Toast.LENGTH_SHORT).show();
                     } else {
-                        int id_subs = subscriptionHandler.readSubs(id_user);
+                        int id_subs = subscriptionHandler.readId(id_user);
                         if (id_subs != -1) {
                             //next input your data subs is actived
                             int id_data = dataPasswordHandler.readData(username);
@@ -248,7 +254,7 @@ public class MenuManager extends MainActivity {
                             }
                         } else {
                             int id_data = dataPasswordHandler.countData(id_user);
-                            if (id_data < 3) {
+                            if (id_data < 10) {
                                 insertData(id_user, name_website, username, passEncypt, alertDialog);
                             } else {
                                 Toast.makeText(MenuManager.this, "paid for access", Toast.LENGTH_SHORT).show();
@@ -260,7 +266,6 @@ public class MenuManager extends MainActivity {
         } else if (page.equals("subscription")) {
             String key = "a3271802a5318fb310c94d6f28943212";
             SecretKey secretKey = hashingKey.keyFromHexString(key);
-            dateEnd = dateStart.plusDays(30);
             textInputLayoutPassword.setVisibility(View.GONE);
             textViewMainAddItem.setText("Subscription");
             textInputLayoutWebsite.setHint("Id-User");
@@ -273,14 +278,15 @@ public class MenuManager extends MainActivity {
                     if (name_website.equals("")) {
                         Toast.makeText(MenuManager.this, "Input id-user/code", Toast.LENGTH_SHORT).show();
                     } else {
-                        int id_subs = subscriptionHandler.readSubs(id_user);
+                        int id_subs = subscriptionHandler.readId(id_user);
                         if (id_subs == -1) {
                             try {
                                 String encyrpt = hashingKey.encrypt(name_website, secretKey);
                                 String decrypt = hashingKey.decrypt(encyrpt, secretKey);
                                 if (name_website.equals(decrypt)) {
-                                    long insertSubs = SubscriptionHandler.insertDataSubs(id_user, name_website, encyrpt, dateStart.toString(), dateEnd.toString());
+                                    long insertSubs = SubscriptionHandler.insertDataSubs(id_user, name_website, encyrpt, dateStart.toString(), datePlus30.toString());
                                     Toast.makeText(MenuManager.this, "subscription active", Toast.LENGTH_SHORT).show();
+                                    checkDate(id_user);
                                     if (insertSubs != -1) {
                                         editTextWebsite.setText("");
                                         editTextUsername.setText("");

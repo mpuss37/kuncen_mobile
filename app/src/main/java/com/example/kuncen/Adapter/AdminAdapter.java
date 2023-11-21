@@ -15,11 +15,13 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kuncen.Handler.DataPasswordHandler;
+import com.example.kuncen.Handler.SubscriptionHandler;
 import com.example.kuncen.Handler.UserHandler;
 import com.example.kuncen.Model.UserModel;
 import com.example.kuncen.R;
 import com.example.kuncen.View.MenuManager;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class AdminAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -28,6 +30,7 @@ public class AdminAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private UserHandler userHandler;
     private DataPasswordHandler dataPasswordHandler;
     private MenuManager menuManager;
+    private SubscriptionHandler subscriptionHandler;
 
     public AdminAdapter(ArrayList<UserModel> userModelArrayList, Context context) {
         this.userModelArrayList = userModelArrayList;
@@ -35,7 +38,7 @@ public class AdminAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView textViewIdUser, textViewUsername, textViewData, textViewPremium;
+        private TextView textViewIdUser, textViewUsername, textViewData, textViewPremium, textViewDateEnd;
         private ImageView imageViewCopy, imageViewCopy1, imageViewRemove;
         private ConstraintLayout constraintLayoutItem;
 
@@ -46,6 +49,7 @@ public class AdminAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             textViewUsername = itemView.findViewById(R.id.tvWebsite);
             textViewData = itemView.findViewById(R.id.tvPassword);
             textViewPremium = itemView.findViewById(R.id.tvPremium);
+            textViewDateEnd = itemView.findViewById(R.id.tvDateEnd);
             imageViewRemove = itemView.findViewById(R.id.imageViewRemove);
             imageViewCopy1 = itemView.findViewById(R.id.imageViewCopyUsername);
             imageViewCopy = itemView.findViewById(R.id.imageViewCopyPassword);
@@ -64,15 +68,25 @@ public class AdminAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         UserModel userModel = userModelArrayList.get(position);
         userHandler = new UserHandler(context);
         dataPasswordHandler = new DataPasswordHandler(context);
+        subscriptionHandler = new SubscriptionHandler(context);
         userHandler.openRead();
         menuManager = new MenuManager();
         int countData = dataPasswordHandler.countData(userModel.getId_user());
+        int readUser = userHandler.readUser(userModel.getUsername(), userModel.getPassword());
+        int readSubs = subscriptionHandler.readId(readUser);
+        LocalDate localeDateSubs = subscriptionHandler.readDateEnd(readUser);
         userHandler.openWrite();
         if (holder instanceof ViewHolder) {
             ViewHolder viewHolder = (ViewHolder) holder;
             viewHolder.textViewUsername.setText(userModel.getUsername());
-            viewHolder.textViewData.setText("total data : "+String.valueOf(countData));
-            viewHolder.textViewPremium.setText("gurung premium");
+            viewHolder.textViewData.setText("total data  : " + String.valueOf(countData));
+            if (readSubs != -1) {
+                viewHolder.textViewPremium.setText("premium");
+                viewHolder.textViewDateEnd.setText("expired : " + localeDateSubs.toString());
+            } else {
+                viewHolder.textViewPremium.setText("standard");
+            }
+
             viewHolder.textViewIdUser.setVisibility(View.GONE);
             viewHolder.imageViewCopy1.setVisibility(View.GONE);
             viewHolder.imageViewCopy.setVisibility(View.GONE);

@@ -254,7 +254,7 @@ public class MenuManager extends MainActivity {
                             }
                         } else {
                             int id_data = dataPasswordHandler.countData(id_user);
-                            if (id_data < 3) {
+                            if (id_data <= 3) {
                                 insertData(id_user, name_website, username, passEncypt, alertDialog);
                             } else {
                                 Toast.makeText(MenuManager.this, "paid for access", Toast.LENGTH_SHORT).show();

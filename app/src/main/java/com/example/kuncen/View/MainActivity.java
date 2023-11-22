@@ -84,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
                 if (buttonSave.getText().equals("Sign Up")) {
                     if (username.equals("") && pass.equals("")) {
                         Toast.makeText(MainActivity.this, "Input username/pass", Toast.LENGTH_SHORT).show();
+                    } else if (pass.length() <= 8) {
+                        Toast.makeText(MainActivity.this, "more than 8 character", Toast.LENGTH_SHORT).show();
                     } else {
                         int id_user = userHandler.readUser(username, "null");
                         if (id_user != -1) {

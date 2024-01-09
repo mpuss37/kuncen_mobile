@@ -10,6 +10,11 @@
         android:iconTint="@color/red_primary"
         android:title="subscription" />
     <item
+        android:id="@+id/pwned"
+        android:icon="@drawable/check"
+        android:iconTint="@color/red_primary"
+        android:title="checker" />
+    <item
         android:id="@+id/logout"
         android:icon="@drawable/exit"
         android:title="logout" />

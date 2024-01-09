@@ -8,7 +8,7 @@
         <item name="android:textColorHighlight">#FF0000</item>
         <item name="backgroundColor">@color/white</item>
         <item name="android:windowLightStatusBar">true</item>
-        <item name="android:fontFamily">@font/jetbrains_mono_semibold</item>
+        <item name="android:fontFamily">@font/jetbrains_mono_medium</item>
 
 
     </style>

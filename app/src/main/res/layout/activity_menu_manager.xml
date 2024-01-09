@@ -23,14 +23,34 @@
             app:headerLayout="@layout/side_header"
             app:menu="@menu/side_body_menu" >
 
-            <TextView
-                android:id="@+id/textViewDaySubs"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                android:text="0"
-                android:textColor="#000000"
-                android:textSize="16sp" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/textViewDaySubs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:text="Anjay"
+                    android:textColor="#FF0000"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imageViewAddProfilePicture"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="30dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/camera"
+                    app:tint="@color/red_main" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </com.google.android.material.navigation.NavigationView>
     </androidx.drawerlayout.widget.DrawerLayout>
 

@@ -1,5 +1,7 @@
 package com.example.kuncen.View;
 
+import static android.graphics.fonts.FontStyle.FONT_WEIGHT_BOLD;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -8,8 +10,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.fonts.Font;
+import android.graphics.fonts.FontStyle;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -33,6 +39,7 @@ import com.example.kuncen.R;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Random;
@@ -46,7 +53,7 @@ public class MenuManager extends MainActivity {
     private ScrollView scrollView;
     private NavigationView navigationViewSideMenu;
     Intent intent;
-    private ImageView imageViewAddItem, imageViewHome, imageViewProfile;
+    private ImageView imageViewAddItem, imageViewHome, imageViewProfile, imageViewAddProfilePicture;
     private TextView textViewPassword, textViewHome, textViewProfile, textViewMainAddItem, textViewDaySubs, textViewUsernameSideHeader, textViewTierSideHeader;
     private Button buttonSave, buttonGenerator;
     private EditText editTextWebsite, editTextUsername, editTextPassword;
@@ -84,6 +91,7 @@ public class MenuManager extends MainActivity {
         userHandler.openRead();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MenuManager.this, RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
+        imageViewAddProfilePicture = findViewById(R.id.imageViewAddProfilePicture);
         int id_admin = bundle.getInt("key_id_admin");
         keyUsername = bundle.getString("key_username");
         id_user = bundle.getInt("key_id_user");
@@ -91,6 +99,7 @@ public class MenuManager extends MainActivity {
         view = navigationViewSideMenu.getHeaderView(0);
         textViewUsernameSideHeader = view.findViewById(R.id.textView9);
         textViewDaySubs = findViewById(R.id.textViewDaySubs);
+        imageViewAddProfilePicture = findViewById(R.id.imageViewAddProfilePicture);
         textViewTierSideHeader = view.findViewById(R.id.textViewTier);
         checkDate(id_user);
         textViewUsernameSideHeader.setText(keyUsername);
@@ -122,6 +131,15 @@ public class MenuManager extends MainActivity {
                     menuAddItem("subscription");
                 }
                 return false;
+            }
+        });
+
+        imageViewAddProfilePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                intent.setType("image/*");
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -157,9 +175,10 @@ public class MenuManager extends MainActivity {
             if (dateStart.isBefore(localeDateSubs)) {
                 textViewDaySubs.setText(localeDateSubs.toString());
                 textViewTierSideHeader.setText("Premium");
+                textViewTierSideHeader.setTextColor(Color.RED);
             } else {
                 subscriptionHandler.deleteSubs(id_user);
-                textViewDaySubs.setText("0");
+                textViewDaySubs.setText("");
                 textViewTierSideHeader.setText("Standard");
             }
         }
@@ -254,7 +273,7 @@ public class MenuManager extends MainActivity {
                             }
                         } else {
                             int id_data = dataPasswordHandler.countData(id_user);
-                            if (id_data <= 3) {
+                            if (id_data < 3) {
                                 insertData(id_user, name_website, username, passEncypt, alertDialog);
                             } else {
                                 Toast.makeText(MenuManager.this, "paid for access", Toast.LENGTH_SHORT).show();
@@ -275,16 +294,16 @@ public class MenuManager extends MainActivity {
                 public void onClick(View v) {
                     name_website = editTextWebsite.getText().toString();
                     username = editTextUsername.getText().toString();
-                    if (name_website.equals("")) {
+                    if (name_website.equals("") || username.equals("")) {
                         Toast.makeText(MenuManager.this, "Input id-user/code", Toast.LENGTH_SHORT).show();
                     } else {
                         int id_subs = subscriptionHandler.readId(id_user);
                         if (id_subs == -1) {
                             try {
-                                String encyrpt = hashingKey.encrypt(name_website, secretKey);
-                                String decrypt = hashingKey.decrypt(encyrpt, secretKey);
-                                if (name_website.equals(decrypt)) {
-                                    long insertSubs = SubscriptionHandler.insertDataSubs(id_user, name_website, encyrpt, dateStart.toString(), datePlus30.toString());
+                                String encrypt = hashingKey.encrypt(name_website, secretKey);
+//                                String decrypt = hashingKey.decrypt(encrypt, secretKey);
+                                if (true) {
+                                    long insertSubs = SubscriptionHandler.insertDataSubs(id_user, name_website, encrypt, dateStart.toString(), datePlus30.toString());
                                     Toast.makeText(MenuManager.this, "subscription active", Toast.LENGTH_SHORT).show();
                                     checkDate(id_user);
                                     if (insertSubs != -1) {
@@ -312,7 +331,7 @@ public class MenuManager extends MainActivity {
                     int randomIndex = randomText.nextInt(plainText.length());
                     randomWord.append(plainText.charAt(randomIndex));
                 }
-                editTextWebsite.setText(randomWord.toString());
+                editTextWebsite.setText(randomWord);
             });
 
         }

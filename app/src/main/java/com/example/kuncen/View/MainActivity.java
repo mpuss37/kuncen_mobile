@@ -93,14 +93,19 @@ public class MainActivity extends AppCompatActivity {
                             etUsername.setText("");
                             etPassword.setText("");
                         } else {
-                            long insertUser = userHandler.insertUser(username, passEncypt, parseDate);
-                            Toast.makeText(MainActivity.this, "data has been successfully added", Toast.LENGTH_SHORT).show();
-                            buttonSave.setText("Login");
-                            donthaveAcc.setText("already have account, ");
-                            signup.setText("Login");
-                            if (insertUser != -1) {
-                                etUsername.setText("");
-                                etPassword.setText("");
+                            id_user = userHandler.countData();
+                            if (id_user < 2) {
+                                long insertUser = userHandler.insertUser(username, passEncypt, parseDate);
+                                Toast.makeText(MainActivity.this, "data has been successfully added", Toast.LENGTH_SHORT).show();
+                                buttonSave.setText("Login");
+                                donthaveAcc.setText("already have account, ");
+                                signup.setText("Login");
+                                if (insertUser != -1) {
+                                    etUsername.setText("");
+                                    etPassword.setText("");
+                                }
+                            } else {
+                                Toast.makeText(MainActivity.this, "max create new user '2'", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }

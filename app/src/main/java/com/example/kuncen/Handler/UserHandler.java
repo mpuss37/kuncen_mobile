@@ -44,6 +44,13 @@ public class UserHandler extends MainActivity {
         return sqLiteDatabase.insert( databasePass.table_user, null, contentValues);
     }
 
+    public int countData() {
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT id_user FROM " + databasePass.table_user, null);
+        int jumlah = cursor.getCount();
+        cursor.close();
+        return jumlah;
+    }
+
     //    public boolean readUser(String username) {
     public int readUser(String username, String password) {
         hashingKey = new HashingKey();

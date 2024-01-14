@@ -3,14 +3,73 @@ package com.example.kuncen.EncryptionKey;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 public class HashingKey {
+    private StringBuilder stringBuilder;
+    private String anjay, pass5Char;
+
     private static SecretKey generateAESKeyFromHexString(String hexString) {
         byte[] keyBytes = hexStringToBytes(hexString);
         return new SecretKeySpec(keyBytes, 0, keyBytes.length, "AES");
+    }
+
+    public String passToHash1(String input) {
+        try {
+            stringBuilder = new StringBuilder();
+            MessageDigest sha1 = MessageDigest.getInstance("SHA-1");
+            byte[] bytes = input.getBytes();
+            sha1.update(bytes);
+            byte[] sha1Hash = sha1.digest();
+
+            for (byte b : sha1Hash) {
+                stringBuilder.append(String.format("%02x", b));
+            }
+        } catch (NoSuchAlgorithmException e) {
+            System.err.println("error class hashing key");
+        }
+
+        return stringBuilder.toString().toUpperCase();
+    }
+
+    public String checkerPass(String pass){
+        try {
+            stringBuilder = new StringBuilder();
+            pass5Char = pass.substring(0, 5);
+            String apiUrl = "https://api.pwnedpasswords.com/range/"+pass5Char;
+            URL url = new URL(apiUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+            reader.close();
+
+            if (stringBuilder.toString().toLowerCase().contains(pass5Char)) {
+                anjay = "anjay";
+            }else {
+                anjay = "heker";
+            }
+            connection.disconnect();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return pass5Char;
     }
 
     public String encrypt(String plaintext, Key key) throws Exception {
@@ -29,11 +88,10 @@ public class HashingKey {
     }
 
     public String bytesToHex(byte[] bytes) {
-        StringBuilder hexString = new StringBuilder();
         for (byte b : bytes) {
-            hexString.append(String.format("%02x", b));
+            stringBuilder.append(String.format("%02x", b));
         }
-        return hexString.toString();
+        return stringBuilder.toString();
     }
 
 

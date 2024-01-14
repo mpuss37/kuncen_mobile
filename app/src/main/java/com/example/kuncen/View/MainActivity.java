@@ -1,13 +1,11 @@
 package com.example.kuncen.View;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -21,8 +19,6 @@ import com.example.kuncen.Handler.UserHandler;
 import com.example.kuncen.R;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 import javax.crypto.SecretKey;
 
 public class MainActivity extends AppCompatActivity {
@@ -94,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                             etPassword.setText("");
                         } else {
                             id_user = userHandler.countData();
-                            if (id_user < 2) {
+                            if (id_user < 5) {
                                 long insertUser = userHandler.insertUser(username, passEncypt, parseDate);
                                 Toast.makeText(MainActivity.this, "data has been successfully added", Toast.LENGTH_SHORT).show();
                                 buttonSave.setText("Login");
@@ -142,14 +138,11 @@ public class MainActivity extends AppCompatActivity {
                     buttonSave.setText("Login");
                     donthaveAcc.setText("already have account, ");
                     signup.setText("Login");
-                    Toast.makeText(MainActivity.this, "ini menu login", Toast.LENGTH_SHORT).show();
-                } else {
+                }else if (buttonSave.getText().equals("Login")) {
                     buttonSave.setText("Sign Up");
-                    donthaveAcc.setText("dont have account, ");
-                    signup.setText("Sign Up");
-                    Toast.makeText(MainActivity.this, "ini menu signup", Toast.LENGTH_SHORT).show();
+                    donthaveAcc.setText("already have account, ");
+                    signup.setText("Login");
                 }
-
             }
         });
     }

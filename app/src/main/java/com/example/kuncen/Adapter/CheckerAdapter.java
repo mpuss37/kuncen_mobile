@@ -3,8 +3,6 @@ package com.example.kuncen.Adapter;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.ColorSpace;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,14 +17,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.kuncen.EncryptionKey.HashingKey;
 import com.example.kuncen.Handler.DataPasswordHandler;
 import com.example.kuncen.Model.DataModel;
-import com.example.kuncen.Model.UserModel;
 import com.example.kuncen.R;
 import com.example.kuncen.View.MainActivity;
 import com.example.kuncen.View.MenuManager;
 
 import java.util.ArrayList;
 
-public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class CheckerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<DataModel> dataModelArrayList;
     private Context context;
     private DataPasswordHandler dataPasswordHandler;
@@ -35,14 +31,16 @@ public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private HashingKey hashingKey;
     private MainActivity mainActivity;
 
-    public DataPasswordAdapter(ArrayList<DataModel> dataModelArrayList, Context context) {
+    private String username, pass, passDecrypt, passChecker, passHash1;
+
+    public CheckerAdapter(ArrayList<DataModel> dataModelArrayList, Context context) {
         this.dataModelArrayList = dataModelArrayList;
         this.context = context;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView textViewIdUser, textViewWebsiteName, textViewUsername, textViewPassword;
-        private ImageView imageViewCopyUsername, imageViewCopyPassword, imageViewRemove, imageViewWebsite;
+        private ImageView imageViewCopyUsername, imageViewCopyPassword, imageViewRemove;
         private ConstraintLayout constraintLayoutItem;
 
         public ViewHolder(@NonNull View itemView) {
@@ -55,7 +53,9 @@ public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             imageViewCopyUsername = itemView.findViewById(R.id.imageViewCopyUsername);
             imageViewCopyPassword = itemView.findViewById(R.id.imageViewCopyPassword);
             imageViewRemove = itemView.findViewById(R.id.imageViewRemove);
-            imageViewWebsite = itemView.findViewById(R.id.imageViewWebsite);
+            imageViewCopyUsername.setImageResource(R.drawable.check);
+            imageViewCopyPassword.setVisibility(View.GONE);
+            imageViewRemove.setVisibility(View.GONE);
             constraintLayoutItem = itemView.findViewById(R.id.clItem);
         }
     }
@@ -81,55 +81,31 @@ public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             viewHolder.textViewWebsiteName.setText(dataModel.getName_website());
             viewHolder.textViewUsername.setText(dataModel.getUsername());
             try {
-                String passDecrypt = hashingKey.decrypt(dataModel.getPassword(), mainActivity.secretKey);
+                passDecrypt = hashingKey.decrypt(dataModel.getPassword(), mainActivity.secretKey);
                 viewHolder.textViewPassword.setText(passDecrypt);
+                passHash1 = hashingKey.passToHash1(passDecrypt);
             } catch (Exception e) {
             }
-            String username, password, website;
-            website = viewHolder.textViewWebsiteName.getText().toString();
             username = viewHolder.textViewUsername.getText().toString();
-            password = viewHolder.textViewPassword.getText().toString();
-
-            if (website.toLowerCase().contains("google")) {
-                viewHolder.imageViewWebsite.setImageResource(R.drawable.google);
-            } else if (website.toLowerCase().contains("facebook")) {
-                viewHolder.imageViewWebsite.setImageResource(R.drawable.facebook);
-            } else {
-                int tint = Color.parseColor("#f34235");
-                viewHolder.imageViewWebsite.setColorFilter(tint);
-            }
-
-            viewHolder.imageViewRemove.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dataModelArrayList.remove(holder.getAdapterPosition());
-                    dataPasswordHandler.deleteData(dataModel.getUsername());
-                    Toast.makeText(context, "delete, Username : " + username, Toast.LENGTH_SHORT).show();
-                    notifyItemRemoved(holder.getAdapterPosition());
-                }
-            });
+            pass = viewHolder.textViewPassword.getText().toString();
 
             viewHolder.imageViewCopyUsername.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    saveClipboard(username);
-                    Toast.makeText(context, "username has been copy", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            viewHolder.imageViewCopyPassword.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    saveClipboard(password);
-                    Toast.makeText(context, "password has been copy, Username : " + username, Toast.LENGTH_SHORT).show();
+//                    saveClipboard(username);
+//                    Toast.makeText(context, "akunmu kebegal, Ganti password", Toast.LENGTH_SHORT).show();
                 }
             });
 
             viewHolder.constraintLayoutItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    saveClipboard(password);
-                    Toast.makeText(context, "password has been copy, Username : " + username, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "" + passHash1.substring(0, 5), Toast.LENGTH_SHORT).show();
+//                    if (hashingKey.checkerPass(passHash1).equals("")) {
+//                        Toast.makeText(context, "Gk Anjay", Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        Toast.makeText(context, "Anjay", Toast.LENGTH_SHORT).show();
+//                    }
                 }
             });
         }

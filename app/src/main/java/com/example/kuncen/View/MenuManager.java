@@ -17,6 +17,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.fonts.Font;
 import android.graphics.fonts.FontStyle;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kuncen.Adapter.AdminAdapter;
+import com.example.kuncen.Adapter.CheckerAdapter;
 import com.example.kuncen.Adapter.DataPasswordAdapter;
 import com.example.kuncen.EncryptionKey.HashingKey;
 import com.example.kuncen.Handler.DataPasswordHandler;
@@ -59,12 +61,13 @@ public class MenuManager extends MainActivity {
     private EditText editTextWebsite, editTextUsername, editTextPassword;
     private TextInputLayout textInputLayoutWebsite, textInputLayoutUsername, textInputLayoutPassword;
     String name_website, username, pass, keyUsername;
-    private int id_user;
+    private int id_user, id_admin;
     private DataPasswordHandler dataPasswordHandler;
     private SubscriptionHandler subscriptionHandler;
     private UserHandler userHandler;
     private DataPasswordAdapter dataPasswordAdapter;
     private AdminAdapter adminAdapter;
+    private CheckerAdapter checkerAdapter;
     private ArrayList<DataModel> dataModelArrayList;
     private ArrayList<UserModel> userModelArrayList;
     private View view;
@@ -92,7 +95,7 @@ public class MenuManager extends MainActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MenuManager.this, RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
         imageViewAddProfilePicture = findViewById(R.id.imageViewAddProfilePicture);
-        int id_admin = bundle.getInt("key_id_admin");
+        id_admin = bundle.getInt("key_id_admin");
         keyUsername = bundle.getString("key_username");
         id_user = bundle.getInt("key_id_user");
         navigationViewSideMenu = findViewById(R.id.navSideView);
@@ -127,11 +130,23 @@ public class MenuManager extends MainActivity {
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     finish();
-                } else if (idPosition == R.id.subscription) {
-                    menuAddItem("subscription");
+                }
+                if (id_admin > 0) {
+                    item.setVisible(false);
+                } else {
+                    if (idPosition == R.id.subscription) {
+                        menuAddItem("subscription");
+                    } else if (idPosition == R.id.checker) {
+                        intent = new Intent(MenuManager.this, MenuChecker.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.putExtra("key_id_user", id_user);
+                        intent.putExtra("key_username", username);
+                        startActivity(intent);
+                    }
                 }
                 return false;
             }
+
         });
 
         imageViewAddProfilePicture.setOnClickListener(new View.OnClickListener() {
@@ -187,7 +202,7 @@ public class MenuManager extends MainActivity {
 
 
     private void checkMenu(int id_user, int id_admin) {
-        if (id_user > 0) {
+        if (id_user >= 0) {
             dataModelArrayList = dataPasswordHandler.displayData(id_user);
             dataPasswordAdapter = new DataPasswordAdapter(dataModelArrayList, MenuManager.this);
             recyclerView.setAdapter(dataPasswordAdapter);
@@ -276,7 +291,10 @@ public class MenuManager extends MainActivity {
                             if (id_data < 3) {
                                 insertData(id_user, name_website, username, passEncypt, alertDialog);
                             } else {
-                                Toast.makeText(MenuManager.this, "paid for access", Toast.LENGTH_SHORT).show();
+                                Toast toast= Toast.makeText(getApplicationContext(),
+                                        "paid for access", Toast.LENGTH_SHORT);
+                                toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL, 0, 0);
+                                toast.show();
                             }
                         }
                     }

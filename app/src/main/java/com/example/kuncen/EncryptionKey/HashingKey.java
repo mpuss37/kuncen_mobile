@@ -17,7 +17,7 @@ import java.util.Base64;
 
 public class HashingKey {
     private StringBuilder stringBuilder;
-    private String anjay, pass5Char;
+    private String message, pass5Char;
 
     private static SecretKey generateAESKeyFromHexString(String hexString) {
         byte[] keyBytes = hexStringToBytes(hexString);
@@ -58,18 +58,24 @@ public class HashingKey {
             }
             reader.close();
 
-            if (stringBuilder.toString().toLowerCase().contains(pass5Char)) {
-                anjay = "anjay";
+            if (stringBuilder.toString().contains(pass.substring(5))){
+                message = "immediately change the password";
             }else {
-                anjay = "heker";
+                message = "your account its safe";
             }
+
+//            if (stringBuilder.toString().toLowerCase().contains(pass5Char)) {
+//                anjay = "anjay";
+//            }else {
+//                anjay = "heker";
+//            }
             connection.disconnect();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println(e);
         }
 
-        return pass5Char;
+        return message;
     }
 
     public String encrypt(String plaintext, Key key) throws Exception {

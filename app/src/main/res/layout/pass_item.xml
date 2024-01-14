@@ -60,6 +60,17 @@
                 app:layout_constraintBottom_toBottomOf="@+id/tvUsername"
                 app:layout_constraintStart_toEndOf="@+id/tvUsername" />
 
+            <TextView
+                android:id="@+id/tvPasswordChecker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:text="tvPasswordChecker"
+                android:textColor="#000000"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/tvUsername"
+                app:layout_constraintStart_toEndOf="@+id/tvUsername" />
+
             <ImageView
                 android:id="@+id/imageViewRemove"
                 android:layout_width="25dp"

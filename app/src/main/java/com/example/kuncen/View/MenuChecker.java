@@ -1,36 +1,22 @@
 package com.example.kuncen.View;
 
 import androidx.annotation.NonNull;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ScrollView;
-import android.widget.TextView;
 
-import com.example.kuncen.Adapter.AdminAdapter;
 import com.example.kuncen.Adapter.CheckerAdapter;
-import com.example.kuncen.Adapter.DataPasswordAdapter;
 import com.example.kuncen.EncryptionKey.HashingKey;
 import com.example.kuncen.Handler.DataPasswordHandler;
-import com.example.kuncen.Handler.SubscriptionHandler;
 import com.example.kuncen.Handler.UserHandler;
 import com.example.kuncen.Model.DataModel;
-import com.example.kuncen.Model.UserModel;
 import com.example.kuncen.R;
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Random;
 
 
 public class MenuChecker extends MainActivity {

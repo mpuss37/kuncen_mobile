@@ -3,6 +3,8 @@ package com.example.kuncen.Adapter;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.graphics.Color;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,16 +33,14 @@ public class CheckerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private HashingKey hashingKey;
     private MainActivity mainActivity;
 
-    private String username, pass, passDecrypt, passChecker, passHash1;
-
     public CheckerAdapter(ArrayList<DataModel> dataModelArrayList, Context context) {
         this.dataModelArrayList = dataModelArrayList;
         this.context = context;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView textViewIdUser, textViewWebsiteName, textViewUsername, textViewPassword;
-        private ImageView imageViewCopyUsername, imageViewCopyPassword, imageViewRemove;
+        private TextView textViewIdUser, textViewWebsiteName, textViewUsername, textViewPassword, textViewPasswordChecker;
+        private ImageView imageViewCopyUsername, imageViewCopyPassword, imageViewRemove, imageViewWebsite;
         private ConstraintLayout constraintLayoutItem;
 
         public ViewHolder(@NonNull View itemView) {
@@ -50,12 +50,14 @@ public class CheckerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             textViewWebsiteName = itemView.findViewById(R.id.tvWebsite);
             textViewUsername = itemView.findViewById(R.id.tvUsername);
             textViewPassword = itemView.findViewById(R.id.tvPassword);
+            textViewPasswordChecker = itemView.findViewById(R.id.tvPasswordChecker);
             imageViewCopyUsername = itemView.findViewById(R.id.imageViewCopyUsername);
             imageViewCopyPassword = itemView.findViewById(R.id.imageViewCopyPassword);
             imageViewRemove = itemView.findViewById(R.id.imageViewRemove);
-            imageViewCopyUsername.setImageResource(R.drawable.check);
-            imageViewCopyPassword.setVisibility(View.GONE);
+            imageViewWebsite = itemView.findViewById(R.id.imageViewWebsite);
             imageViewRemove.setVisibility(View.GONE);
+            imageViewCopyPassword.setVisibility(View.GONE);
+            imageViewCopyUsername.setImageResource(R.drawable.check);
             constraintLayoutItem = itemView.findViewById(R.id.clItem);
         }
     }
@@ -81,35 +83,50 @@ public class CheckerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             viewHolder.textViewWebsiteName.setText(dataModel.getName_website());
             viewHolder.textViewUsername.setText(dataModel.getUsername());
             try {
-                passDecrypt = hashingKey.decrypt(dataModel.getPassword(), mainActivity.secretKey);
+                String passDecrypt = hashingKey.decrypt(dataModel.getPassword(), mainActivity.secretKey);
                 viewHolder.textViewPassword.setText(passDecrypt);
-                passHash1 = hashingKey.passToHash1(passDecrypt);
             } catch (Exception e) {
             }
+            String username, password, passwordChecker, website;
+            website = viewHolder.textViewWebsiteName.getText().toString();
             username = viewHolder.textViewUsername.getText().toString();
-            pass = viewHolder.textViewPassword.getText().toString();
+            password = viewHolder.textViewPassword.getText().toString();
 
-            viewHolder.imageViewCopyUsername.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-//                    saveClipboard(username);
-//                    Toast.makeText(context, "akunmu kebegal, Ganti password", Toast.LENGTH_SHORT).show();
-                }
-            });
+            viewHolder.textViewPasswordChecker.setText(hashingKey.passToHash1(password));
+            passwordChecker = viewHolder.textViewPasswordChecker.getText().toString();
+
+            if (website.toLowerCase().contains("google")) {
+                viewHolder.imageViewWebsite.setImageResource(R.drawable.google);
+            } else if (website.toLowerCase().contains("facebook")) {
+                viewHolder.imageViewWebsite.setImageResource(R.drawable.facebook);
+            } else {
+                int tint = Color.parseColor("#f34235");
+                viewHolder.imageViewWebsite.setColorFilter(tint);
+            }
 
             viewHolder.constraintLayoutItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context, "" + passHash1.substring(0, 5), Toast.LENGTH_SHORT).show();
-//                    if (hashingKey.checkerPass(passHash1).equals("")) {
-//                        Toast.makeText(context, "Gk Anjay", Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        Toast.makeText(context, "Anjay", Toast.LENGTH_SHORT).show();
-//                    }
+                    new CheckerPassTask().execute(passwordChecker);
                 }
             });
         }
 
+    }
+
+    private class CheckerPassTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            String passHash = params[0];
+            return hashingKey.checkerPass(passHash);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            // Tangani hasilnya di thread utama
+            Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void saveClipboard(String item) {

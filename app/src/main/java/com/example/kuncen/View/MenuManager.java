@@ -1,7 +1,5 @@
 package com.example.kuncen.View;
 
-import static android.graphics.fonts.FontStyle.FONT_WEIGHT_BOLD;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -10,12 +8,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.fonts.Font;
-import android.graphics.fonts.FontStyle;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -41,7 +36,6 @@ import com.example.kuncen.R;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Random;
@@ -140,7 +134,7 @@ public class MenuManager extends MainActivity {
                         intent = new Intent(MenuManager.this, MenuChecker.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.putExtra("key_id_user", id_user);
-                        intent.putExtra("key_username", username);
+                        intent.putExtra("key_username", keyUsername);
                         startActivity(intent);
                     }
                 }
@@ -291,9 +285,9 @@ public class MenuManager extends MainActivity {
                             if (id_data < 3) {
                                 insertData(id_user, name_website, username, passEncypt, alertDialog);
                             } else {
-                                Toast toast= Toast.makeText(getApplicationContext(),
+                                Toast toast = Toast.makeText(getApplicationContext(),
                                         "paid for access", Toast.LENGTH_SHORT);
-                                toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL, 0, 0);
+                                toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
                                 toast.show();
                             }
                         }

@@ -4,7 +4,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.ColorSpace;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.kuncen.EncryptionKey.HashingKey;
 import com.example.kuncen.Handler.DataPasswordHandler;
 import com.example.kuncen.Model.DataModel;
-import com.example.kuncen.Model.UserModel;
 import com.example.kuncen.R;
 import com.example.kuncen.View.MainActivity;
 import com.example.kuncen.View.MenuManager;
@@ -71,9 +68,9 @@ public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         hashingKey = new HashingKey();
         mainActivity = new MainActivity();
+        menuManager = new MenuManager();
         DataModel dataModel = dataModelArrayList.get(position);
         dataPasswordHandler = new DataPasswordHandler(context);
-        menuManager = new MenuManager();
         dataPasswordHandler.openWrite();
         if (holder instanceof ViewHolder) {
             ViewHolder viewHolder = (ViewHolder) holder;
@@ -93,7 +90,7 @@ public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             if (website.toLowerCase().contains("google")) {
                 viewHolder.imageViewWebsite.setImageResource(R.drawable.google);
             } else if (website.toLowerCase().contains("facebook")) {
-                viewHolder.imageViewWebsite.setImageResource(R.drawable.facebook);
+                viewHolder.imageViewWebsite.setImageResource(R.drawable.google);
             } else {
                 int tint = Color.parseColor("#f34235");
                 viewHolder.imageViewWebsite.setColorFilter(tint);
@@ -130,6 +127,15 @@ public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 public void onClick(View v) {
                     saveClipboard(password);
                     Toast.makeText(context, "password has been copy, Username : " + username, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            viewHolder.constraintLayoutItem.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    menuManager = new MenuManager();
+                    menuManager.menuAddItem("edit_user", "adapter", context, website, username, password);
+                    return false;
                 }
             });
         }

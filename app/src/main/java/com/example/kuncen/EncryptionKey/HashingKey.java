@@ -42,11 +42,11 @@ public class HashingKey {
         return stringBuilder.toString().toUpperCase();
     }
 
-    public String checkerPass(String pass){
+    public String checkerPass(String pass) {
         try {
             stringBuilder = new StringBuilder();
             pass5Char = pass.substring(0, 5);
-            String apiUrl = "https://api.pwnedpasswords.com/range/"+pass5Char;
+            String apiUrl = "https://api.pwnedpasswords.com/range/" + pass5Char;
             URL url = new URL(apiUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
@@ -58,17 +58,11 @@ public class HashingKey {
             }
             reader.close();
 
-            if (stringBuilder.toString().contains(pass.substring(5))){
-                message = "immediately change the password";
-            }else {
+            if (stringBuilder.toString().contains(pass.substring(5))) {
+                message = "your account not safe, Change yours password";
+            } else {
                 message = "your account its safe";
             }
-
-//            if (stringBuilder.toString().toLowerCase().contains(pass5Char)) {
-//                anjay = "anjay";
-//            }else {
-//                anjay = "heker";
-//            }
             connection.disconnect();
 
         } catch (IOException e) {

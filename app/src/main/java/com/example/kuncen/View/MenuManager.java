@@ -8,6 +8,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -59,6 +60,7 @@ public class MenuManager extends MainActivity {
     private DataPasswordHandler dataPasswordHandler;
     private SubscriptionHandler subscriptionHandler;
     private UserHandler userHandler;
+    private ConstraintLayout constraintLayoutAddMenu;
     private DataPasswordAdapter dataPasswordAdapter;
     private AdminAdapter adminAdapter;
     private CheckerAdapter checkerAdapter;
@@ -129,7 +131,7 @@ public class MenuManager extends MainActivity {
                     item.setVisible(false);
                 } else {
                     if (idPosition == R.id.subscription) {
-                        menuAddItem("subscription");
+                        menuAddItem("subscription", "null", MenuManager.this, null, null, null);
                     } else if (idPosition == R.id.checker) {
                         intent = new Intent(MenuManager.this, MenuChecker.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -205,7 +207,7 @@ public class MenuManager extends MainActivity {
                 @Override
                 public void onClick(View v) {
                     hideKeyboard(v);
-                    menuAddItem("user");
+                    menuAddItem("add_user", "null", MenuManager.this, null, null, null);
                 }
             });
         } else if (id_admin > 0) {
@@ -235,27 +237,37 @@ public class MenuManager extends MainActivity {
         }
     }
 
-    private void menuAddItem(String page) {
-        ConstraintLayout constraintLayoutAddMenu = findViewById(R.id.clAddItem);
-        View view = LayoutInflater.from(MenuManager.this).inflate(R.layout.activity_add_item, constraintLayoutAddMenu);
-        dataPasswordHandler = new DataPasswordHandler(this);
+    public void menuAddItem(String page, String adapter, Context context, String data1, String data2, String data3) {
+        if (adapter.equals("null")) {
+            view = LayoutInflater.from(context).inflate(R.layout.activity_add_item, null);
+            constraintLayoutAddMenu = view.findViewById(R.id.clAddItem);
+        } else if (adapter.equals("adapter")) {
+            view = LayoutInflater.from(context).inflate(R.layout.activity_add_item, constraintLayoutAddMenu);
+        }
+        dataPasswordHandler = new DataPasswordHandler(context);
         dataPasswordHandler.openWrite();
-        subscriptionHandler = new SubscriptionHandler(this);
+        subscriptionHandler = new SubscriptionHandler(context);
         subscriptionHandler.openWrite();
-        AlertDialog.Builder builder = new AlertDialog.Builder(MenuManager.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setView(view);
         buttonSave = view.findViewById(R.id.btnSave);
         buttonGenerator = view.findViewById(R.id.btnGenerator);
+        buttonGenerator.setVisibility(View.GONE);
         textViewMainAddItem = view.findViewById(R.id.textViewMainAddItem);
         editTextWebsite = view.findViewById(R.id.etWebsite);
         editTextUsername = view.findViewById(R.id.etUsername);
         editTextPassword = view.findViewById(R.id.etPass);
+
+        editTextWebsite.setText(data1);
+        editTextUsername.setText(data2);
+        editTextPassword.setText(data3);
+
         textInputLayoutWebsite = view.findViewById(R.id.textInputLayoutWebsite);
         textInputLayoutUsername = view.findViewById(R.id.textInputLayoutUsername);
         textInputLayoutPassword = view.findViewById(R.id.textInputLayoutPassword);
         final AlertDialog alertDialog = builder.create();
 
-        if (page.equals("user")) {
+        if (page.equals("add_user")) {
             buttonGenerator.setVisibility(View.GONE);
             buttonSave.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -269,14 +281,53 @@ public class MenuManager extends MainActivity {
                         throw new RuntimeException(e);
                     }
                     if (name_website.equals("") && username.equals("") && pass.equals("")) {
-                        Toast.makeText(MenuManager.this, "Input username/pass", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Input username/pass", Toast.LENGTH_SHORT).show();
                     } else {
                         int id_subs = subscriptionHandler.readId(id_user);
                         if (id_subs != -1) {
                             //next input your data subs is actived
                             int id_data = dataPasswordHandler.readData(username);
                             if (id_data != -1) {
-                                Toast.makeText(MenuManager.this, "data with username " + username, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "data with username " + username, Toast.LENGTH_SHORT).show();
+                            } else {
+                                insertData(id_user, name_website, username, passEncypt, alertDialog);
+                            }
+                        } else {
+                            int id_data = dataPasswordHandler.countData(id_user);
+                            if (id_data < 3) {
+                                insertData(id_user, name_website, username, passEncypt, alertDialog);
+                            } else {
+                                Toast toast = Toast.makeText(getApplicationContext(),
+                                        "paid for access", Toast.LENGTH_SHORT);
+                                toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
+                                toast.show();
+                            }
+                        }
+                    }
+                }
+            });
+        } else if (page.equals("edit_user")) {
+            buttonGenerator.setVisibility(View.GONE);
+            buttonSave.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    name_website = editTextWebsite.getText().toString();
+                    username = editTextUsername.getText().toString();
+                    pass = editTextPassword.getText().toString();
+                    try {
+                        passEncypt = hashingKey.encrypt(pass, secretKey);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                    if (name_website.equals("") && username.equals("") && pass.equals("")) {
+                        Toast.makeText(context, "Input username/pass", Toast.LENGTH_SHORT).show();
+                    } else {
+                        int id_subs = subscriptionHandler.readId(id_user);
+                        if (id_subs != -1) {
+                            //next input your data subs is actived
+                            int id_data = dataPasswordHandler.readData(username);
+                            if (id_data != -1) {
+                                Toast.makeText(context, "data with username " + username, Toast.LENGTH_SHORT).show();
                             } else {
                                 insertData(id_user, name_website, username, passEncypt, alertDialog);
                             }
@@ -307,7 +358,7 @@ public class MenuManager extends MainActivity {
                     name_website = editTextWebsite.getText().toString();
                     username = editTextUsername.getText().toString();
                     if (name_website.equals("") || username.equals("")) {
-                        Toast.makeText(MenuManager.this, "Input id-user/code", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Input id-user/code", Toast.LENGTH_SHORT).show();
                     } else {
                         int id_subs = subscriptionHandler.readId(id_user);
                         if (id_subs == -1) {
@@ -316,20 +367,20 @@ public class MenuManager extends MainActivity {
 //                                String decrypt = hashingKey.decrypt(encrypt, secretKey);
                                 if (true) {
                                     long insertSubs = SubscriptionHandler.insertDataSubs(id_user, name_website, encrypt, dateStart.toString(), datePlus30.toString());
-                                    Toast.makeText(MenuManager.this, "subscription active", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, "subscription active", Toast.LENGTH_SHORT).show();
                                     checkDate(id_user);
                                     if (insertSubs != -1) {
                                         editTextWebsite.setText("");
                                         editTextUsername.setText("");
                                     }
                                 } else {
-                                    Toast.makeText(MenuManager.this, "wrong code", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, "wrong code", Toast.LENGTH_SHORT).show();
                                 }
                             } catch (Exception e) {
-                                Toast.makeText(MenuManager.this, "error", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "error", Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Toast.makeText(MenuManager.this, "subscription still active", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "subscription still active", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }

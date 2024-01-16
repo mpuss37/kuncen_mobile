@@ -83,13 +83,12 @@ public class CheckerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             viewHolder.textViewWebsiteName.setText(dataModel.getName_website());
             viewHolder.textViewUsername.setText(dataModel.getUsername());
             try {
-                String passDecrypt = hashingKey.decrypt(dataModel.getPassword(), mainActivity.secretKey);
+                String passDecrypt = hashingKey.decrypt(dataModel.getPassword(), mainActivity.getSecretKey());
                 viewHolder.textViewPassword.setText(passDecrypt);
             } catch (Exception e) {
             }
-            String username, password, passwordChecker, website;
+            String password, passwordChecker, website;
             website = viewHolder.textViewWebsiteName.getText().toString();
-            username = viewHolder.textViewUsername.getText().toString();
             password = viewHolder.textViewPassword.getText().toString();
 
             viewHolder.textViewPasswordChecker.setText(hashingKey.passToHash1(password));

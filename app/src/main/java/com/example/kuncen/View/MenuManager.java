@@ -57,6 +57,8 @@ public class MenuManager extends MainActivity {
     private TextInputLayout textInputLayoutWebsite, textInputLayoutUsername, textInputLayoutPassword;
     String name_website, username, pass, keyUsername;
     private int id_user, id_admin;
+
+    private MainActivity mainActivity;
     private DataPasswordHandler dataPasswordHandler;
     private SubscriptionHandler subscriptionHandler;
     private UserHandler userHandler;
@@ -70,6 +72,7 @@ public class MenuManager extends MainActivity {
     private LocalDate dateStart = LocalDate.now(), datePlus30 = dateStart.plusDays(2), dateEnd;
     private Random randomText;
     private HashingKey hashingKey;
+    private Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +80,7 @@ public class MenuManager extends MainActivity {
         setContentView(R.layout.activity_menu_manager);
         getSupportActionBar().show();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        Bundle bundle = getIntent().getExtras();
+        bundle = this.getIntent().getExtras();
         recyclerView = findViewById(R.id.rvData);
         scrollView = findViewById(R.id.svMenuManager);
         dataModelArrayList = new ArrayList<>();
@@ -131,7 +134,7 @@ public class MenuManager extends MainActivity {
                     item.setVisible(false);
                 } else {
                     if (idPosition == R.id.subscription) {
-                        menuAddItem("subscription", "null", MenuManager.this, null, null, null);
+                        menuAddItem("subscription", "null", MenuManager.this, id_user, null, null, null);
                     } else if (idPosition == R.id.checker) {
                         intent = new Intent(MenuManager.this, MenuChecker.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -207,7 +210,7 @@ public class MenuManager extends MainActivity {
                 @Override
                 public void onClick(View v) {
                     hideKeyboard(v);
-                    menuAddItem("add_user", "null", MenuManager.this, null, null, null);
+                    menuAddItem("add_user", "null", MenuManager.this, id_user, null, null, null);
                 }
             });
         } else if (id_admin > 0) {
@@ -226,7 +229,7 @@ public class MenuManager extends MainActivity {
 
     private void insertData(int id_user, String name_website, String username, String pass, AlertDialog alertDialog) {
         long insertData = DataPasswordHandler.insertDataPass(id_user, name_website, username, pass);
-        dataPasswordAdapter.notifyDataSetChanged();
+//        dataPasswordAdapter.notifyDataSetChanged();
         if (insertData != -1) {
             dataModelArrayList.clear();
             dataModelArrayList.addAll(dataPasswordHandler.displayData(id_user));
@@ -237,13 +240,39 @@ public class MenuManager extends MainActivity {
         }
     }
 
-    public void menuAddItem(String page, String adapter, Context context, String data1, String data2, String data3) {
+    private void editData(Context context, int id_user, String name_website, String username, String pass, AlertDialog alertDialog) {
+        long editDataPass = DataPasswordHandler.editDataPass(id_user, name_website, username, pass);
+        if (editDataPass != -1) {
+            dataModelArrayList = new ArrayList<>();
+            dataPasswordAdapter = new DataPasswordAdapter(dataModelArrayList, context);
+            dataPasswordAdapter.notifyDataSetChanged();
+            dataModelArrayList.clear();
+            dataPasswordHandler = new DataPasswordHandler(context);
+            dataModelArrayList.addAll(dataPasswordHandler.displayData(id_user));
+            editTextWebsite.setText("");
+            editTextUsername.setText("");
+            editTextPassword.setText("");
+        } else {
+            Toast.makeText(context, "gagal", Toast.LENGTH_SHORT).show();
+        }
+//        alertDialog.dismiss();
+    }
+
+    public void menuAddItem(String page, String adapter, Context context, int id_user, String data1, String data2, String data3) {
+        if (context instanceof MenuManager) {
+            MenuManager activity = (MenuManager) context;
+            if (activity.isFinishing() || activity.isDestroyed()) {
+                return;
+            }
+        }
         if (adapter.equals("null")) {
             view = LayoutInflater.from(context).inflate(R.layout.activity_add_item, null);
             constraintLayoutAddMenu = view.findViewById(R.id.clAddItem);
         } else if (adapter.equals("adapter")) {
             view = LayoutInflater.from(context).inflate(R.layout.activity_add_item, constraintLayoutAddMenu);
         }
+        mainActivity = new MainActivity();
+        hashingKey = new HashingKey();
         dataPasswordHandler = new DataPasswordHandler(context);
         dataPasswordHandler.openWrite();
         subscriptionHandler = new SubscriptionHandler(context);
@@ -276,7 +305,7 @@ public class MenuManager extends MainActivity {
                     username = editTextUsername.getText().toString();
                     pass = editTextPassword.getText().toString();
                     try {
-                        passEncypt = hashingKey.encrypt(pass, secretKey);
+                        passEncypt = hashingKey.encrypt(pass, getSecretKey());
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
@@ -322,26 +351,8 @@ public class MenuManager extends MainActivity {
                     if (name_website.equals("") && username.equals("") && pass.equals("")) {
                         Toast.makeText(context, "Input username/pass", Toast.LENGTH_SHORT).show();
                     } else {
-                        int id_subs = subscriptionHandler.readId(id_user);
-                        if (id_subs != -1) {
-                            //next input your data subs is actived
-                            int id_data = dataPasswordHandler.readData(username);
-                            if (id_data != -1) {
-                                Toast.makeText(context, "data with username " + username, Toast.LENGTH_SHORT).show();
-                            } else {
-                                insertData(id_user, name_website, username, passEncypt, alertDialog);
-                            }
-                        } else {
-                            int id_data = dataPasswordHandler.countData(id_user);
-                            if (id_data < 3) {
-                                insertData(id_user, name_website, username, passEncypt, alertDialog);
-                            } else {
-                                Toast toast = Toast.makeText(getApplicationContext(),
-                                        "paid for access", Toast.LENGTH_SHORT);
-                                toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
-                                toast.show();
-                            }
-                        }
+                        Toast.makeText(context, "" + pass, Toast.LENGTH_SHORT).show();
+                        editData(context, id_user, name_website, username, passEncypt, alertDialog);
                     }
                 }
             });

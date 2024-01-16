@@ -42,10 +42,11 @@ public class DataPasswordHandler extends MainActivity {
         return sqLiteDatabase.insert(databasePass.table_data, null, contentValues);
     }
 
-    public long editDataPass(String website, String username, String password) {
+    public static long editDataPass(int id_user, String website, String username, String password) {
         contentValues = new ContentValues();
         String whereClause = "username = ?";
         String[] whereArgs = {String.valueOf(username)};
+        contentValues.put("id_user", id_user);
         contentValues.put(databasePass.col_website_name, website);
         contentValues.put(databasePass.col_username, username);
         contentValues.put(databasePass.col_pass, password);

@@ -78,11 +78,13 @@ public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             viewHolder.textViewWebsiteName.setText(dataModel.getName_website());
             viewHolder.textViewUsername.setText(dataModel.getUsername());
             try {
-                String passDecrypt = hashingKey.decrypt(dataModel.getPassword(), mainActivity.secretKey);
+                String passDecrypt = hashingKey.decrypt(dataModel.getPassword(), mainActivity.getSecretKey());
                 viewHolder.textViewPassword.setText(passDecrypt);
             } catch (Exception e) {
             }
             String username, password, website;
+            int id_user;
+            id_user = Integer.parseInt(viewHolder.textViewIdUser.getText().toString());
             website = viewHolder.textViewWebsiteName.getText().toString();
             username = viewHolder.textViewUsername.getText().toString();
             password = viewHolder.textViewPassword.getText().toString();
@@ -134,7 +136,7 @@ public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 @Override
                 public boolean onLongClick(View v) {
                     menuManager = new MenuManager();
-                    menuManager.menuAddItem("edit_user", "adapter", context, website, username, password);
+                    menuManager.menuAddItem("edit_user", "adapter", context, id_user, website, username, password);
                     return false;
                 }
             });

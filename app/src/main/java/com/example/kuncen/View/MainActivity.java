@@ -34,7 +34,11 @@ public class MainActivity extends AppCompatActivity {
     public HashingKey hashingKey = new HashingKey();
     private ConstraintLayout constraintLayoutMain;
     private final String key = "a3271802a5318fb310c94d6f28943212";
-    public final SecretKey secretKey = hashingKey.keyFromHexString(key);
+    final SecretKey secretKey = hashingKey.keyFromHexString(key);
+
+    public SecretKey getSecretKey() {
+        return secretKey;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

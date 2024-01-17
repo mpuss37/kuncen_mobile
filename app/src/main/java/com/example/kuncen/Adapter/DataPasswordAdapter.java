@@ -137,6 +137,9 @@ public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 public boolean onLongClick(View v) {
                     menuManager = new MenuManager();
                     menuManager.menuAddItem("edit_user", "adapter", context, id_user, website, username, password);
+                    dataModelArrayList.clear();
+                    dataModelArrayList.addAll(dataPasswordHandler.displayData(id_user));
+                    notifyDataSetChanged();
                     return false;
                 }
             });

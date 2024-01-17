@@ -1,8 +1,11 @@
 package com.example.kuncen.View;
 
+import static com.example.kuncen.Handler.DataPasswordHandler.editDataPass;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -114,7 +117,7 @@ public class MenuManager extends MainActivity {
         textViewHome = findViewById(R.id.textViewHome);
         textViewProfile = findViewById(R.id.textViewProfile);
 
-        checkMenu(id_user, id_admin);
+        checkMenu(this, id_user, id_admin);
 
         drawerLayoutSideMenu = findViewById(R.id.drawerSideMain);
         drawerLayoutSideMenu.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
@@ -200,10 +203,10 @@ public class MenuManager extends MainActivity {
     }
 
 
-    private void checkMenu(int id_user, int id_admin) {
+    private void checkMenu(Context context, int id_user, int id_admin) {
         if (id_user >= 0) {
             dataModelArrayList = dataPasswordHandler.displayData(id_user);
-            dataPasswordAdapter = new DataPasswordAdapter(dataModelArrayList, MenuManager.this);
+            dataPasswordAdapter = new DataPasswordAdapter(dataModelArrayList, context);
             recyclerView.setAdapter(dataPasswordAdapter);
             dataPasswordAdapter.notifyDataSetChanged();
             imageViewAddItem.setOnClickListener(new View.OnClickListener() {
@@ -229,9 +232,7 @@ public class MenuManager extends MainActivity {
 
     private void insertData(int id_user, String name_website, String username, String pass, AlertDialog alertDialog) {
         long insertData = DataPasswordHandler.insertDataPass(id_user, name_website, username, pass);
-//        dataPasswordAdapter.notifyDataSetChanged();
         if (insertData != -1) {
-            dataModelArrayList.clear();
             dataModelArrayList.addAll(dataPasswordHandler.displayData(id_user));
             editTextWebsite.setText("");
             editTextUsername.setText("");
@@ -241,14 +242,9 @@ public class MenuManager extends MainActivity {
     }
 
     private void editData(Context context, int id_user, String name_website, String username, String pass, AlertDialog alertDialog) {
-        long editDataPass = DataPasswordHandler.editDataPass(id_user, name_website, username, pass);
-        if (editDataPass != -1) {
-            dataModelArrayList = new ArrayList<>();
-            dataPasswordAdapter = new DataPasswordAdapter(dataModelArrayList, context);
-            dataPasswordAdapter.notifyDataSetChanged();
-            dataModelArrayList.clear();
-            dataPasswordHandler = new DataPasswordHandler(context);
-            dataModelArrayList.addAll(dataPasswordHandler.displayData(id_user));
+        long editDataPass = editDataPass(id_user, name_website, username, pass);
+        if (editDataPass > 0) {
+            Toast.makeText(context, "" + editDataPass, Toast.LENGTH_SHORT).show();
             editTextWebsite.setText("");
             editTextUsername.setText("");
             editTextPassword.setText("");

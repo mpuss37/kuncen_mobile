@@ -4,11 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
-
-import com.example.kuncen.Model.DataModel;
-
-import java.util.ArrayList;
 
 public class DatabasePass extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "kuncen.db";

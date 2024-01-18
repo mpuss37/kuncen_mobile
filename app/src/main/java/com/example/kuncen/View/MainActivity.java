@@ -19,6 +19,7 @@ import com.example.kuncen.Handler.UserHandler;
 import com.example.kuncen.R;
 
 import java.time.LocalDate;
+
 import javax.crypto.SecretKey;
 
 public class MainActivity extends AppCompatActivity {
@@ -138,14 +139,14 @@ public class MainActivity extends AppCompatActivity {
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (buttonSave.getText().equals("Sign Up")) {
-                    buttonSave.setText("Login");
-                    donthaveAcc.setText("already have account, ");
-                    signup.setText("Login");
-                }else if (buttonSave.getText().equals("Login")) {
+                if (buttonSave.getText().equals("Login")) {
                     buttonSave.setText("Sign Up");
-                    donthaveAcc.setText("already have account, ");
+                    donthaveAcc.setText("Already have account, ");
                     signup.setText("Login");
+                } else {
+                    buttonSave.setText("Login");
+                    donthaveAcc.setText("Don't have account, ");
+                    signup.setText("Sign Up");
                 }
             }
         });

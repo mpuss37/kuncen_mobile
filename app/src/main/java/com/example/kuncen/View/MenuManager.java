@@ -262,6 +262,7 @@ public class MenuManager extends MainActivity {
         }
         if (adapter.equals("null")) {
             view = LayoutInflater.from(context).inflate(R.layout.activity_add_item, null);
+            view = LayoutInflater.from(context).inflate(R.layout.activity_add_item, null);
             constraintLayoutAddMenu = view.findViewById(R.id.clAddItem);
         } else if (adapter.equals("adapter")) {
             view = LayoutInflater.from(context).inflate(R.layout.activity_add_item, constraintLayoutAddMenu);

@@ -60,6 +60,8 @@ public class HashingKey {
 
             if (stringBuilder.toString().contains(pass.substring(5))) {
                 message = "your account not safe, Change yours password";
+            } else if (stringBuilder.toString().equals("")) {
+                message = "bad connection";
             } else {
                 message = "your account its safe";
             }

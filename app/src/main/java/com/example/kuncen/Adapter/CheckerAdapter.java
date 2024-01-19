@@ -123,7 +123,6 @@ public class CheckerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         @Override
         protected void onPostExecute(String result) {
-            // Tangani hasilnya di thread utama
             Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
         }
     }

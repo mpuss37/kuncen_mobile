@@ -12,9 +12,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -39,6 +42,8 @@ import com.example.kuncen.R;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Random;
@@ -52,13 +57,14 @@ public class MenuManager extends MainActivity {
     private ScrollView scrollView;
     private NavigationView navigationViewSideMenu;
     Intent intent;
-    private ImageView imageViewAddItem, imageViewHome, imageViewProfile, imageViewAddProfilePicture;
+    private ImageView imageViewAddItem, imageViewHome, imageViewProfile, imageViewProfilePicture, imageViewAddProfilePicture;
     private TextView textViewPassword, textViewHome, textViewProfile, textViewMainAddItem, textViewDaySubs, textViewUsernameSideHeader, textViewTierSideHeader;
     private Button buttonSave, buttonGenerator;
     private EditText editTextWebsite, editTextUsername, editTextPassword;
     private TextInputLayout textInputLayoutWebsite, textInputLayoutUsername, textInputLayoutPassword;
     String name_website, username, pass, keyUsername;
-    private int id_user, id_admin;
+    private int id_user, id_admin, PICK_IMAGE_REQUEST;
+    private byte[] byteImage;
 
     private MainActivity mainActivity;
     private DataPasswordHandler dataPasswordHandler;
@@ -75,6 +81,7 @@ public class MenuManager extends MainActivity {
     private Random randomText;
     private HashingKey hashingKey;
     private Bundle bundle;
+    private Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,13 +108,20 @@ public class MenuManager extends MainActivity {
         id_user = bundle.getInt("key_id_user");
         navigationViewSideMenu = findViewById(R.id.navSideView);
         view = navigationViewSideMenu.getHeaderView(0);
+        imageViewProfilePicture = view.findViewById(R.id.imageViewProfilePicture);
         textViewUsernameSideHeader = view.findViewById(R.id.textView9);
+        textViewTierSideHeader = view.findViewById(R.id.textViewTier);
+
+        checkDate(id_user);
+        byteImage = userHandler.checkImage(id_user);
+        if (byteImage != null) {
+            bitmap = BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length);
+            imageViewProfilePicture.setImageBitmap(bitmap);
+        }
+
+        textViewUsernameSideHeader.setText(keyUsername);
         textViewDaySubs = findViewById(R.id.textViewDaySubs);
         imageViewAddProfilePicture = findViewById(R.id.imageViewAddProfilePicture);
-        textViewTierSideHeader = view.findViewById(R.id.textViewTier);
-        checkDate(id_user);
-        textViewUsernameSideHeader.setText(keyUsername);
-
         imageViewAddItem = findViewById(R.id.imageViewAdd);
         imageViewHome = findViewById(R.id.imageViewHome);
         imageViewProfile = findViewById(R.id.imageViewProfile);
@@ -150,14 +164,6 @@ public class MenuManager extends MainActivity {
 
         });
 
-        imageViewAddProfilePicture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-                intent.setType("image/*");
-                startActivityForResult(intent, 1);
-            }
-        });
 
         imageViewHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -180,6 +186,36 @@ public class MenuManager extends MainActivity {
                 }
             }
         });
+
+        imageViewAddProfilePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imagePick(id_user);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byteImage = stream.toByteArray();
+                userHandler.updateImage(id_user, byteImage);
+                imageViewProfilePicture.setImageBitmap(bitmap);
+            } catch (IOException e) {
+            }
+        }
+    }
+
+    private void imagePick(int id_user) {
+        byteImage = userHandler.checkImage(id_user);
+        intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
     public int checkDate(int id_user) {

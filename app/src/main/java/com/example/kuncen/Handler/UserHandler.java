@@ -20,6 +20,7 @@ public class UserHandler extends MainActivity {
     private String whereClause;
     private Cursor cursor;
     private ArrayList<UserModel> modelArrayList = new ArrayList<>();
+    private byte [] byteImage;
 
     public UserHandler(Context context) {
         databasePass = new DatabasePass(context);
@@ -41,7 +42,24 @@ public class UserHandler extends MainActivity {
         contentValues = new ContentValues();
         contentValues.put(databasePass.col_username, username);
         contentValues.put(databasePass.col_pass, password);
-        return sqLiteDatabase.insert( databasePass.table_user, null, contentValues);
+        return sqLiteDatabase.insert(databasePass.table_user, null, contentValues);
+    }
+
+    public long updateImage(int id_user, byte[] image) {
+        contentValues = new ContentValues();
+        String whereClause = "id_user = ?";
+        String[] whereArgs = {String.valueOf(id_user)};
+        contentValues.put(databasePass.col_image, image);
+        return sqLiteDatabase.update(databasePass.table_user, contentValues, whereClause, whereArgs);
+    }
+
+    public byte[] checkImage(int id_user) {
+        cursor = sqLiteDatabase.rawQuery("select image from " + databasePass.table_user + " where id_user = '" + id_user + "'", null);
+        if (cursor.moveToFirst()) {
+            byteImage = cursor.getBlob(0);
+        }
+        cursor.close();
+        return byteImage;
     }
 
     public int countData() {

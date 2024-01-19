@@ -10,6 +10,7 @@ public class DatabasePass extends SQLiteOpenHelper {
     public final String table_user = "user";
     public final String col_username = "username";
     public final String col_pass = "password";
+    public final String col_image = "image";
 
     public final String table_admin = "admin";
     public final String col_admin_username = "username";
@@ -40,7 +41,7 @@ public class DatabasePass extends SQLiteOpenHelper {
     }
 
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table IF NOT EXISTS " + table_user + " (id_user integer primary key autoincrement, " + col_username + " text, " + col_pass + " text)");
+        db.execSQL("create table IF NOT EXISTS " + table_user + " (id_user integer primary key autoincrement, " + col_username + " text, " + col_pass + " text, " + col_image + " blob)");
         contentValues = new ContentValues();
         contentValues.put(col_username, "admin");
         contentValues.put(col_pass, "miminganteng");

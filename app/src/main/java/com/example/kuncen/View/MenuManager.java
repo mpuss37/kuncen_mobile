@@ -200,7 +200,7 @@ public class MenuManager extends MainActivity {
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
                 stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 50, stream);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 0, stream);
                 byteImage = stream.toByteArray();
                 userHandler.updateImage(id_user, byteImage);
                 imageViewProfilePicture.setImageBitmap(bitmap);
@@ -213,7 +213,7 @@ public class MenuManager extends MainActivity {
         if (byteImage != null) {
             bitmap = BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length);
             stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 50, stream);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 0, stream);
             imageViewProfilePicture.setImageBitmap(bitmap);
         }
     }

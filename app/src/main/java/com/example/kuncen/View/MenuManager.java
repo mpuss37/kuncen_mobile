@@ -65,6 +65,7 @@ public class MenuManager extends MainActivity {
     String name_website, username, pass, keyUsername;
     private int id_user, id_admin, PICK_IMAGE_REQUEST;
     private byte[] byteImage;
+    private ByteArrayOutputStream stream;
 
     private MainActivity mainActivity;
     private DataPasswordHandler dataPasswordHandler;
@@ -114,10 +115,7 @@ public class MenuManager extends MainActivity {
 
         checkDate(id_user);
         byteImage = userHandler.checkImage(id_user);
-        if (byteImage != null) {
-            bitmap = BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length);
-            imageViewProfilePicture.setImageBitmap(bitmap);
-        }
+        checkImage(byteImage);
 
         textViewUsernameSideHeader.setText(keyUsername);
         textViewDaySubs = findViewById(R.id.textViewDaySubs);
@@ -201,13 +199,22 @@ public class MenuManager extends MainActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 50, stream);
                 byteImage = stream.toByteArray();
                 userHandler.updateImage(id_user, byteImage);
                 imageViewProfilePicture.setImageBitmap(bitmap);
             } catch (IOException e) {
             }
+        }
+    }
+
+    private void checkImage(byte [] byteImage){
+        if (byteImage != null) {
+            bitmap = BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length);
+            stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 50, stream);
+            imageViewProfilePicture.setImageBitmap(bitmap);
         }
     }
 

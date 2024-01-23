@@ -265,8 +265,8 @@ public class MenuManager extends MainActivity {
         if (id_user > 0) {
             dataModelArrayList = dataPasswordHandler.displayData(id_user);
             dataPasswordAdapter = new DataPasswordAdapter(dataModelArrayList, context);
-            recyclerView.setAdapter(adminAdapter);
-            adminAdapter.notifyDataSetChanged();
+            recyclerView.setAdapter(dataPasswordAdapter);
+            dataPasswordAdapter.notifyDataSetChanged();
             imageViewAddItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

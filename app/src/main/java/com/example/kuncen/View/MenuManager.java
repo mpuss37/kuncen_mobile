@@ -20,6 +20,8 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -62,11 +64,12 @@ public class MenuManager extends MainActivity {
     private Button buttonSave, buttonGenerator;
     private EditText editTextWebsite, editTextUsername, editTextPassword;
     private TextInputLayout textInputLayoutWebsite, textInputLayoutUsername, textInputLayoutPassword;
+    private MenuItem menuItem1, menuItem2, menuItem3, menuItem4;
+    private MenuInflater menuInflater;
     String name_website, username, pass, keyUsername;
     private int id_user, id_admin, PICK_IMAGE_REQUEST;
     private byte[] byteImage;
     private ByteArrayOutputStream stream;
-
     private MainActivity mainActivity;
     private DataPasswordHandler dataPasswordHandler;
     private SubscriptionHandler subscriptionHandler;
@@ -132,8 +135,6 @@ public class MenuManager extends MainActivity {
 
         drawerLayoutSideMenu = findViewById(R.id.drawerSideMain);
         drawerLayoutSideMenu.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        navigationViewSideMenu = findViewById(R.id.navSideView);
-
         navigationViewSideMenu.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -144,19 +145,19 @@ public class MenuManager extends MainActivity {
                     startActivity(intent);
                     finish();
                 }
-                if (id_admin > 0) {
-                    item.setVisible(false);
-                } else {
-                    if (idPosition == R.id.subscription) {
-                        menuAddItem("subscription", "null", MenuManager.this, id_user, null, null, null);
-                    } else if (idPosition == R.id.checker) {
-                        intent = new Intent(MenuManager.this, MenuChecker.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.putExtra("key_id_user", id_user);
-                        intent.putExtra("key_username", keyUsername);
-                        startActivity(intent);
-                    }
+//                if (id_admin > 0) {
+//                    item.setVisible(false);
+//                } else {
+                if (idPosition == R.id.subscription) {
+                    menuAddItem("subscription", "null", MenuManager.this, id_user, null, null, null);
+                } else if (idPosition == R.id.checker) {
+                    intent = new Intent(MenuManager.this, MenuChecker.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.putExtra("key_id_user", id_user);
+                    intent.putExtra("key_username", keyUsername);
+                    startActivity(intent);
                 }
+//                }
                 return false;
             }
 
@@ -194,13 +195,28 @@ public class MenuManager extends MainActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.side_body_menu, menu);
+        if (id_admin > 0) {
+            menuItem1 = menu.findItem(R.id.guide);
+            menuItem1.setVisible(false);
+            menuItem2 = menu.findItem(R.id.subscription);
+            menuItem1.setVisible(false);
+            menuItem3 = menu.findItem(R.id.checker);
+            menuItem3.setVisible(false);
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
                 stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 0, stream);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
                 byteImage = stream.toByteArray();
                 userHandler.updateImage(id_user, byteImage);
                 imageViewProfilePicture.setImageBitmap(bitmap);
@@ -209,11 +225,11 @@ public class MenuManager extends MainActivity {
         }
     }
 
-    private void checkImage(byte [] byteImage){
+    private void checkImage(byte[] byteImage) {
         if (byteImage != null) {
             bitmap = BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length);
             stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 0, stream);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
             imageViewProfilePicture.setImageBitmap(bitmap);
         }
     }
@@ -246,20 +262,21 @@ public class MenuManager extends MainActivity {
 
 
     private void checkMenu(Context context, int id_user, int id_admin) {
-        if (id_user >= 0) {
+        if (id_user > 0) {
             dataModelArrayList = dataPasswordHandler.displayData(id_user);
             dataPasswordAdapter = new DataPasswordAdapter(dataModelArrayList, context);
-            recyclerView.setAdapter(dataPasswordAdapter);
-            dataPasswordAdapter.notifyDataSetChanged();
+            recyclerView.setAdapter(adminAdapter);
+            adminAdapter.notifyDataSetChanged();
             imageViewAddItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     hideKeyboard(v);
-                    menuAddItem("add_user", "null", MenuManager.this, id_user, null, null, null);
+                    menuAddItem("add_user", "null", context, id_user, null, null, null);
                 }
             });
         } else if (id_admin > 0) {
             userModelArrayList = userHandler.displayUser();
+            adminAdapter = new AdminAdapter(userModelArrayList, MenuManager.this);
             ArrayList<UserModel> userModelArrayList1 = new ArrayList<>();
             for (int i = 1; i < userModelArrayList.size(); i++) {
                 userModelArrayList1.add(userModelArrayList.get(i));
@@ -320,7 +337,6 @@ public class MenuManager extends MainActivity {
         builder.setView(view);
         buttonSave = view.findViewById(R.id.btnSave);
         buttonGenerator = view.findViewById(R.id.btnGenerator);
-        buttonGenerator.setVisibility(View.GONE);
         textViewMainAddItem = view.findViewById(R.id.textViewMainAddItem);
         editTextWebsite = view.findViewById(R.id.etWebsite);
         editTextUsername = view.findViewById(R.id.etUsername);

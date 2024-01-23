@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                             etPassword.setText("");
                         } else {
                             id_user = userHandler.countData();
-                            if (id_user < 5) {
+                            if (id_user <= 3) {
                                 long insertUser = userHandler.insertUser(username, passEncypt, parseDate);
                                 Toast.makeText(MainActivity.this, "data has been successfully added", Toast.LENGTH_SHORT).show();
                                 buttonSave.setText("Login");

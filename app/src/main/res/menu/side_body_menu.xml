@@ -5,7 +5,7 @@
 <!--        android:icon="@drawable/history"-->
 <!--        android:title="history" />-->
     <item
-        android:id="@+id/data"
+        android:id="@+id/guide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/manual"

@@ -430,8 +430,8 @@ public class MenuManager extends MainActivity {
                         if (id_subs == -1) {
                             try {
                                 String encrypt = hashingKey.encrypt(name_website, secretKey);
-//                                String decrypt = hashingKey.decrypt(encrypt, secretKey);
-                                if (true) {
+                                String decrypt = hashingKey.decrypt(encrypt, secretKey);
+                                if (decrypt.equals(username)) {
                                     long insertSubs = SubscriptionHandler.insertDataSubs(id_user, name_website, encrypt, dateStart.toString(), datePlus30.toString());
                                     Toast.makeText(context, "subscription active", Toast.LENGTH_SHORT).show();
                                     checkDate(id_user);

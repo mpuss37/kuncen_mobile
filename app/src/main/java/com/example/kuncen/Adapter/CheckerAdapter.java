@@ -96,9 +96,7 @@ public class CheckerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             if (website.toLowerCase().contains("google")) {
                 viewHolder.imageViewWebsite.setImageResource(R.drawable.google);
-            } else if (website.toLowerCase().contains("facebook")) {
-                viewHolder.imageViewWebsite.setImageResource(R.drawable.facebook);
-            } else {
+            }else {
                 int tint = Color.parseColor("#f34235");
                 viewHolder.imageViewWebsite.setColorFilter(tint);
             }

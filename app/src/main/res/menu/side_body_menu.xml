@@ -8,18 +8,15 @@
         android:id="@+id/guide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:icon="@drawable/manual"
-        android:iconTint="@color/red_primary"
+        android:icon="@drawable/guide"
         android:title="guide" />
     <item
         android:id="@+id/subscription"
         android:icon="@drawable/subs"
-        android:iconTint="@color/red_primary"
         android:title="subscription" />
     <item
         android:id="@+id/checker"
         android:icon="@drawable/check"
-        android:iconTint="@color/red_primary"
         android:title="checker" />
     <item
         android:id="@+id/logout"

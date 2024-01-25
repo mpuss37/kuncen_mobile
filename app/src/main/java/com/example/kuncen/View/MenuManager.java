@@ -20,7 +20,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,7 +44,10 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Random;
@@ -150,6 +152,8 @@ public class MenuManager extends MainActivity {
 //                } else {
                 if (idPosition == R.id.subscription) {
                     menuAddItem("subscription", "null", MenuManager.this, id_user, null, null, null);
+                }else if (idPosition == R.id.guide) {
+                    savePDF();
                 } else if (idPosition == R.id.checker) {
                     intent = new Intent(MenuManager.this, MenuChecker.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -194,20 +198,20 @@ public class MenuManager extends MainActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.side_body_menu, menu);
-        if (id_admin > 0) {
-            menuItem1 = menu.findItem(R.id.guide);
-            menuItem1.setVisible(false);
-            menuItem2 = menu.findItem(R.id.subscription);
-            menuItem1.setVisible(false);
-            menuItem3 = menu.findItem(R.id.checker);
-            menuItem3.setVisible(false);
-        }
-        return super.onCreateOptionsMenu(menu);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        menuInflater = getMenuInflater();
+//        menuInflater.inflate(R.menu.side_body_menu, menu);
+//        if (id_admin > 0) {
+//            menuItem1 = menu.findItem(R.id.guide);
+//            menuItem1.setVisible(false);
+//            menuItem2 = menu.findItem(R.id.subscription);
+//            menuItem1.setVisible(false);
+//            menuItem3 = menu.findItem(R.id.checker);
+//            menuItem3.setVisible(false);
+//        }
+//        return super.onCreateOptionsMenu(menu);
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -311,6 +315,34 @@ public class MenuManager extends MainActivity {
             Toast.makeText(context, "gagal", Toast.LENGTH_SHORT).show();
         }
 //        alertDialog.dismiss();
+    }
+
+    private void savePDF() {
+        copyRawFileToExternalStorage(R.raw.guide, "guide.pdf");
+    }
+
+    private void copyRawFileToExternalStorage(int resourceId, String filename) {
+        try {
+            Context context = getApplicationContext();
+            File externalStorageDir = context.getExternalFilesDir(null);
+            File file = new File(externalStorageDir, filename);
+
+            InputStream inputStream = getResources().openRawResource(resourceId);
+            FileOutputStream outputStream = new FileOutputStream(file);
+
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, read);
+            }
+
+            inputStream.close();
+            outputStream.close();
+
+            Toast.makeText(context, "File saved to: " + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void menuAddItem(String page, String adapter, Context context, int id_user, String data1, String data2, String data3) {

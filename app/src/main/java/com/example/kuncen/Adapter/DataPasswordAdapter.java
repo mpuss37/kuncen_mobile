@@ -90,14 +90,16 @@ public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             username = viewHolder.textViewUsername.getText().toString();
             password = viewHolder.textViewPassword.getText().toString();
 
-//            if (website.toLowerCase().contains("google")) {
-//                viewHolder.imageViewWebsite.setImageResource(R.drawable.google);
-//            } else if (website.toLowerCase().contains("facebook")) {
-//                viewHolder.imageViewWebsite.setImageResource(R.drawable.google);
-//            } else {
-//                int tint = Color.parseColor("#f34235");
-//                viewHolder.imageViewWebsite.setColorFilter(tint);
-//            }
+            if (website.toLowerCase().contains("google")) {
+                viewHolder.imageViewWebsite.setImageResource(R.drawable.google);
+            } else if (website.toLowerCase().contains("yahoo")) {
+                viewHolder.imageViewWebsite.setImageResource(R.drawable.yahoo);
+            } else if (website.toLowerCase().contains("proton")) {
+                viewHolder.imageViewWebsite.setImageResource(R.drawable.yahoo);
+            } else {
+                int tint = Color.parseColor("#f34235");
+                viewHolder.imageViewWebsite.setColorFilter(tint);
+            }
 
             viewHolder.imageViewRemove.setOnClickListener(new View.OnClickListener() {
                 @Override

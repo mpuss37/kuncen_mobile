@@ -120,6 +120,9 @@ public class MenuManager extends MainActivity {
 
         checkDate(id_user);
         byteImage = userHandler.checkImage(id_user);
+        if (byteImage == null){
+            imageViewProfilePicture.setColorFilter(Color.RED);
+        }
         checkImage(byteImage);
 
         textViewUsernameSideHeader.setText(keyUsername);
@@ -152,7 +155,7 @@ public class MenuManager extends MainActivity {
 //                } else {
                 if (idPosition == R.id.subscription) {
                     menuAddItem("subscription", "null", MenuManager.this, id_user, null, null, null);
-                }else if (idPosition == R.id.guide) {
+                } else if (idPosition == R.id.guide) {
                     savePDF();
                 } else if (idPosition == R.id.checker) {
                     intent = new Intent(MenuManager.this, MenuChecker.class);
@@ -223,6 +226,7 @@ public class MenuManager extends MainActivity {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
                 byteImage = stream.toByteArray();
                 userHandler.updateImage(id_user, byteImage);
+                imageViewProfilePicture.setColorFilter(null);
                 imageViewProfilePicture.setImageBitmap(bitmap);
             } catch (IOException e) {
             }
@@ -296,6 +300,7 @@ public class MenuManager extends MainActivity {
     private void insertData(int id_user, String name_website, String username, String pass, AlertDialog alertDialog) {
         long insertData = DataPasswordHandler.insertDataPass(id_user, name_website, username, pass);
         if (insertData != -1) {
+            dataModelArrayList.clear();
             dataModelArrayList.addAll(dataPasswordHandler.displayData(id_user));
             editTextWebsite.setText("");
             editTextUsername.setText("");
@@ -400,18 +405,21 @@ public class MenuManager extends MainActivity {
                         Toast.makeText(context, "Input username/pass", Toast.LENGTH_SHORT).show();
                     } else {
                         int id_subs = subscriptionHandler.readId(id_user);
+                        int id_data_duplicate = dataPasswordHandler.readData(username);
                         if (id_subs != -1) {
-                            //next input your data subs is actived
-                            int id_data = dataPasswordHandler.readData(username);
-                            if (id_data != -1) {
-                                Toast.makeText(context, "data with username " + username, Toast.LENGTH_SHORT).show();
+                            if (id_data_duplicate != -1) {
+                                Toast.makeText(context, "change yours " + username, Toast.LENGTH_SHORT).show();
                             } else {
                                 insertData(id_user, name_website, username, passEncypt, alertDialog);
                             }
                         } else {
                             int id_data = dataPasswordHandler.countData(id_user);
                             if (id_data < 3) {
-                                insertData(id_user, name_website, username, passEncypt, alertDialog);
+                                if (id_data_duplicate != -1) {
+                                    Toast.makeText(context, "change yours " + username, Toast.LENGTH_SHORT).show();
+                                } else {
+                                    insertData(id_user, name_website, username, passEncypt, alertDialog);
+                                }
                             } else {
                                 Toast toast = Toast.makeText(getApplicationContext(),
                                         "paid for access", Toast.LENGTH_SHORT);

@@ -8,7 +8,7 @@
         android:id="@+id/guide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:icon="@drawable/guide"
+        android:icon="@drawable/data"
         android:title="guide" />
     <item
         android:id="@+id/subscription"
@@ -16,7 +16,7 @@
         android:title="subscription" />
     <item
         android:id="@+id/checker"
-        android:icon="@drawable/check"
+        android:icon="@drawable/verification"
         android:title="checker" />
     <item
         android:id="@+id/logout"

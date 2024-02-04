@@ -75,7 +75,7 @@
                 android:fontFamily="@font/jetbrains_mono_semibold"
                 android:hint="Password"
                 android:inputType="textPassword"
-                android:text="herdi1234"
+                android:text="herdu1234"
                 android:textColor="@color/black" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -115,7 +115,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/jetbrains_mono_semibold"
             android:hint="Username"
-            android:text="herdi1234"
+            android:text="herdu1234"
             android:textColor="@color/black" />
 
     </com.google.android.material.textfield.TextInputLayout>

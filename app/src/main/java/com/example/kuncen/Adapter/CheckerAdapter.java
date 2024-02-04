@@ -86,6 +86,7 @@ public class CheckerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 String passDecrypt = hashingKey.decrypt(dataModel.getPassword(), mainActivity.getSecretKey());
                 viewHolder.textViewPassword.setText(passDecrypt);
             } catch (Exception e) {
+                Toast.makeText(context, "false encrypt", Toast.LENGTH_SHORT).show();
             }
             String password, passwordChecker, website;
             website = viewHolder.textViewWebsiteName.getText().toString();

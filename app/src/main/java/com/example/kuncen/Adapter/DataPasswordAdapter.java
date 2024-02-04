@@ -23,6 +23,7 @@ import com.example.kuncen.View.MainActivity;
 import com.example.kuncen.View.MenuManager;
 
 import java.util.ArrayList;
+import java.util.logging.Handler;
 
 public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<DataModel> dataModelArrayList;
@@ -89,14 +90,14 @@ public class DataPasswordAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             username = viewHolder.textViewUsername.getText().toString();
             password = viewHolder.textViewPassword.getText().toString();
 
-            if (website.toLowerCase().contains("google")) {
-                viewHolder.imageViewWebsite.setImageResource(R.drawable.google);
-            } else if (website.toLowerCase().contains("facebook")) {
-                viewHolder.imageViewWebsite.setImageResource(R.drawable.google);
-            } else {
-                int tint = Color.parseColor("#f34235");
-                viewHolder.imageViewWebsite.setColorFilter(tint);
-            }
+//            if (website.toLowerCase().contains("google")) {
+//                viewHolder.imageViewWebsite.setImageResource(R.drawable.google);
+//            } else if (website.toLowerCase().contains("facebook")) {
+//                viewHolder.imageViewWebsite.setImageResource(R.drawable.google);
+//            } else {
+//                int tint = Color.parseColor("#f34235");
+//                viewHolder.imageViewWebsite.setColorFilter(tint);
+//            }
 
             viewHolder.imageViewRemove.setOnClickListener(new View.OnClickListener() {
                 @Override
